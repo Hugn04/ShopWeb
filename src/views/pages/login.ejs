@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng Ký & Đăng Nhập</title>
+  <link rel="icon" href="https://yt3.ggpht.com/a/AGF-l78km1YyNXmF0r3-0CycCA0HLA_i6zYn_8NZEg=s900-c-k-c0xffffffff-no-rj-mo" type="image/gif" sizes="16x16">
+  <link rel="stylesheet" href="/css/login.css">
+  <style>
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      border-radius: 6px;
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      z-index: 9999;
+      opacity: 0;
+      animation: fadeIn 0.4s forwards, fadeOut 0.4s 3s forwards;
+    }
+
+    .toast-error {
+      background-color: #e74c3c;
+      /* Màu đỏ cho thông báo lỗi */
+    }
+
+    .toast-success {
+      background-color: #2ecc71;
+      /* Màu xanh cho thông báo thành công */
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+    }
+  </style>
+
+
+</head>
+
+<body>
+
+  <% if (error.length > 0) { %>
+  <div id="toast" class="toast toast-error"><%= error[0] %></div>
+  <% } %>
+
+  <% if (success.length > 0) { %>
+  <div id="toast" class="toast toast-success"><%= success[0] %></div>
+  <% } %>
+
+
+
+  <div class="main-container">
+    <!-- Text Logo -->
+    <div class="logo-container">
+      <a href="/" class="text-logo">Hugn</a>
+    </div>
+
+    <div class="container">
+      <!-- Đăng nhập form -->
+      <div class="form-container" id="login-form">
+        <h2>Đăng Nhập</h2>
+        <form id="loginForm" method="post" action="/login" novalidate>
+          <div class="form-group">
+            <label for="loginEmail">Email</label>
+            <input type="email" name="email" id="loginEmail" placeholder="Nhập email của bạn">
+            <div class="error" id="loginEmailError">Vui lòng nhập email hợp lệ</div>
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Mật khẩu</label>
+            <input type="password" name="password" id="loginPassword" placeholder="Nhập mật khẩu">
+            <div class="error" id="loginPasswordError">Mật khẩu phải có ít nhất 6 ký
+              tự</div>
+          </div>
+          <button type="submit">Đăng Nhập</button>
+        </form>
+        <div class="toggle-form">
+          Chưa có tài khoản? <a id="showRegister">Đăng ký ngay</a>
+        </div>
+      </div>
+
+      <!-- Đăng ký form -->
+      <div class="form-container" id="register-form" style="display: none;">
+        <h2>Đăng Ký</h2>
+        <form id="registerForm" method="post" action="/register" novalidate>
+          <div class="form-group">
+            <label for="fullName">Họ và tên</label>
+            <input type="text" name="name" id="fullName" placeholder="Nhập họ và tên của bạn">
+            <div class="error" id="fullNameError">Vui lòng nhập họ và tên</div>
+          </div>
+          <div class="form-group">
+            <label for="registerEmail">Email</label>
+            <input type="email" name="email" id="registerEmail" placeholder="Nhập email của bạn">
+            <div class="error" id="registerEmailError">Vui lòng nhập email hợp lệ
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="registerPassword">Mật khẩu</label>
+            <input type="password" name="password" id="registerPassword" placeholder="Nhập mật khẩu">
+            <div class="error" id="registerPasswordError">Mật khẩu phải có ít nhất 6
+              ký tự</div>
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Xác nhận mật khẩu</label>
+            <input type="password" id="confirmPassword" placeholder="Nhập lại mật khẩu">
+            <div class="error" id="confirmPasswordError">Mật khẩu không khớp</div>
+          </div>
+          <button type="submit">Đăng Ký</button>
+        </form>
+        <div class="toggle-form">
+          Đã có tài khoản? <a id="showLogin">Đăng nhập</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Chuyển đổi giữa form đăng nhập và đăng ký
+    document.getElementById('showRegister').addEventListener('click', function() {
+      document.getElementById('login-form').style.display = 'none';
+      document.getElementById('register-form').style.display = 'block';
+    });
+
+    document.getElementById('showLogin').addEventListener('click', function() {
+      document.getElementById('register-form').style.display = 'none';
+      document.getElementById('login-form').style.display = 'block';
+    });
+
+    // Validator cho form đăng nhập
+    const loginForm = document.getElementById('loginForm')
+    loginForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      let isValid = true;
+
+      // Validate email
+      const loginEmail = document.getElementById('loginEmail');
+      const loginEmailError = document.getElementById('loginEmailError');
+
+      if (!validateEmail(loginEmail.value)) {
+        loginEmail.classList.add('invalid');
+        loginEmailError.style.display = 'block';
+        isValid = false;
+      } else {
+        loginEmail.classList.remove('invalid');
+        loginEmailError.style.display = 'none';
+      }
+
+      // Validate password
+      const loginPassword = document.getElementById('loginPassword');
+      const loginPasswordError = document.getElementById('loginPasswordError');
+
+      if (loginPassword.value.length < 6) {
+        loginPassword.classList.add('invalid');
+        loginPasswordError.style.display = 'block';
+        isValid = false;
+      } else {
+        loginPassword.classList.remove('invalid');
+        loginPasswordError.style.display = 'none';
+      }
+
+      if (isValid) {
+        loginForm.submit();
+        this.reset();
+      }
+    });
+
+    // Validator cho form đăng ký
+    const formRegister = document.getElementById('registerForm')
+    formRegister.addEventListener('submit', function(e) {
+      e.preventDefault();
+      let isValid = true;
+
+      // Validate full name
+      const fullName = document.getElementById('fullName');
+      const fullNameError = document.getElementById('fullNameError');
+
+      if (fullName.value.trim() === '') {
+        fullName.classList.add('invalid');
+        fullNameError.style.display = 'block';
+        isValid = false;
+      } else {
+        fullName.classList.remove('invalid');
+        fullNameError.style.display = 'none';
+      }
+
+      // Validate email
+      const registerEmail = document.getElementById('registerEmail');
+      const registerEmailError = document.getElementById('registerEmailError');
+
+      if (!validateEmail(registerEmail.value)) {
+        registerEmail.classList.add('invalid');
+        registerEmailError.style.display = 'block';
+        isValid = false;
+      } else {
+        registerEmail.classList.remove('invalid');
+        registerEmailError.style.display = 'none';
+      }
+
+      // Validate password
+      const registerPassword = document.getElementById('registerPassword');
+      const registerPasswordError = document.getElementById('registerPasswordError');
+
+      if (registerPassword.value.length < 6) {
+        registerPassword.classList.add('invalid');
+        registerPasswordError.style.display = 'block';
+        isValid = false;
+      } else {
+        registerPassword.classList.remove('invalid');
+        registerPasswordError.style.display = 'none';
+      }
+
+      // Validate confirm password
+      const confirmPassword = document.getElementById('confirmPassword');
+      const confirmPasswordError = document.getElementById('confirmPasswordError');
+
+      if (confirmPassword.value !== registerPassword.value) {
+        confirmPassword.classList.add('invalid');
+        confirmPasswordError.style.display = 'block';
+        isValid = false;
+      } else {
+        confirmPassword.classList.remove('invalid');
+        confirmPasswordError.style.display = 'none';
+      }
+
+      if (isValid) {
+        formRegister.submit()
+        this.reset();
+        document.getElementById('register-form').style.display = 'none';
+        document.getElementById('login-form').style.display = 'block';
+      }
+    });
+
+    // Hàm kiểm tra email
+    function validateEmail(email) {
+      const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(email).toLowerCase());
+    }
+
+    // Thêm validator khi người dùng nhập
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(input => {
+      input.addEventListener('input', function() {
+        if (this.classList.contains('invalid')) {
+          validateInput(this);
+        }
+      });
+
+      input.addEventListener('blur', function() {
+        validateInput(this);
+      });
+    });
+
+    function validateInput(input) {
+      const id = input.id;
+
+      switch (id) {
+        case 'loginEmail':
+        case 'registerEmail':
+          const emailError = document.getElementById(id + 'Error');
+          if (!validateEmail(input.value)) {
+            input.classList.add('invalid');
+            emailError.style.display = 'block';
+          } else {
+            input.classList.remove('invalid');
+            emailError.style.display = 'none';
+          }
+          break;
+
+        case 'loginPassword':
+        case 'registerPassword':
+          const passwordError = document.getElementById(id + 'Error');
+          if (input.value.length < 6) {
+            input.classList.add('invalid');
+            passwordError.style.display = 'block';
+          } else {
+            input.classList.remove('invalid');
+            passwordError.style.display = 'none';
+          }
+          break;
+
+        case 'confirmPassword':
+          const confirmError = document.getElementById('confirmPasswordError');
+          const password = document.getElementById('registerPassword').value;
+          if (input.value !== password) {
+            input.classList.add('invalid');
+            confirmError.style.display = 'block';
+          } else {
+            input.classList.remove('invalid');
+            confirmError.style.display = 'none';
+          }
+          break;
+
+        case 'fullName':
+          const nameError = document.getElementById('fullNameError');
+          if (input.value.trim() === '') {
+            input.classList.add('invalid');
+            nameError.style.display = 'block';
+          } else {
+            input.classList.remove('invalid');
+            nameError.style.display = 'none';
+          }
+          break;
+      }
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,683 @@
+<style>
+  /* Main Content Styles */
+
+
+  .header {
+    background-color: #fff;
+    height: var(--header-height);
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+  }
+
+  .toggle-sidebar {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin-right: 15px;
+    display: none;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .admin-profile {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .admin-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+  }
+
+  .admin-name {
+    font-weight: 500;
+  }
+
+  /* Content Area Styles */
+  .content {
+    padding: 20px;
+  }
+
+  .page-title {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .card {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+  }
+
+  .card-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .card-body {
+    padding: 20px;
+  }
+
+  /* Action Bar Styles */
+  .action-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 8px 15px;
+    width: 300px;
+  }
+
+  .search-input {
+    border: none;
+    outline: none;
+    background: none;
+    width: 100%;
+    font-size: 0.9rem;
+  }
+
+  .search-icon {
+    color: var(--text-muted);
+    margin-right: 10px;
+  }
+
+  .filter-dropdown {
+    position: relative;
+  }
+
+  .filter-btn {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+
+  .filter-icon {
+    margin-right: 5px;
+  }
+
+  .filter-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    z-index: 100;
+    display: none;
+  }
+
+  .filter-menu.show {
+    display: block;
+  }
+
+  .filter-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .filter-item:hover {
+    background-color: var(--light-color);
+  }
+
+  .add-btn {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s;
+  }
+
+  .add-btn:hover {
+    background-color: var(--secondary-color);
+  }
+
+  .add-icon {
+    margin-right: 5px;
+  }
+
+  /* Table Styles */
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .data-table th {
+    background-color: var(--light-color);
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  .data-table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  .status-active {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: var(--success-color);
+  }
+
+  .status-inactive {
+    background-color: rgba(244, 67, 54, 0.1);
+    color: var(--danger-color);
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 5px;
+  }
+
+  .btn {
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    border: none;
+    transition: all 0.3s;
+  }
+
+  .btn-edit {
+    background-color: rgba(33, 150, 243, 0.1);
+    color: var(--info-color);
+  }
+
+  .btn-edit:hover {
+    background-color: rgba(33, 150, 243, 0.2);
+  }
+
+  .btn-delete {
+    background-color: rgba(244, 67, 54, 0.1);
+    color: var(--danger-color);
+  }
+
+  .btn-delete:hover {
+    background-color: rgba(244, 67, 54, 0.2);
+  }
+
+  /* Pagination Styles */
+  .pagination {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+
+  .pagination-item {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    margin: 0 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .pagination-item:hover {
+    background-color: var(--light-color);
+  }
+
+  .pagination-item.active {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+  }
+
+  /* Modal Styles */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    display: none;
+  }
+
+  .modal {
+    background-color: #fff;
+    border-radius: 5px;
+    width: 500px;
+    max-width: 90%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .modal-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .modal-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-muted);
+  }
+
+  .modal-body {
+    padding: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+  }
+
+  .form-select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    background-color: #fff;
+  }
+
+  .modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+
+  .btn-cancel {
+    background-color: #f8f9fa;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+  }
+
+  .btn-cancel:hover {
+    background-color: #e9ecef;
+  }
+
+  .btn-save {
+    background-color: var(--primary-color);
+    color: #fff;
+  }
+
+  .btn-save:hover {
+    background-color: var(--secondary-color);
+  }
+
+  /* Responsive Styles */
+  @media (max-width: 992px) {
+    .sidebar {
+      transform: translateX(-100%);
+    }
+
+    .sidebar.show {
+      transform: translateX(0);
+    }
+
+    .main-content {
+      margin-left: 0;
+    }
+
+    .toggle-sidebar {
+      display: block;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .action-bar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .search-box {
+      width: 100%;
+    }
+
+    .action-buttons-group {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+  <div class="content">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Danh sách danh mục</h3>
+      </div>
+      <div class="card-body">
+        <div class="action-bar">
+          <div class="search-box">
+            <input type="text" class="search-input" placeholder="Tìm kiếm danh mục...">
+          </div>
+          <div class="action-buttons-group">
+            <button class="add-btn" id="add-category-btn">
+              <span class="add-icon">+</span>
+              <span>Thêm danh mục</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Tên danh mục</th>
+                <th>Mô tả</th>
+                <th>Số sản phẩm</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% categorys.forEach((category, index)=>{%>
+              <tr>
+                <td><%= index+1%></td>
+                <td id="name"><%= category.name%></td>
+                <td id="description"><%= category.description%></td>
+                <td>120</td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="btn btn-edit edit-category-btn" data-id="<%= category._id%>">Sửa</button>
+                    <button class="btn btn-delete delete-category-btn" data-id="<%= category._id%>">Xóa</button>
+                  </div>
+                </td>
+              </tr>
+              <%})%>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- <div class="pagination">
+          <div class="pagination-item">«</div>
+          <div class="pagination-item active">1</div>
+          <div class="pagination-item">2</div>
+          <div class="pagination-item">3</div>
+          <div class="pagination-item">»</div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Category Modal -->
+  <div class="modal-overlay" id="category-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Thêm danh mục mới</h3>
+        <button class="modal-close" id="close-modal">×</button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="/admin/category/edit" id="category-form">
+          <div class="form-group">
+            <label for="category-name" class="form-label">Tên danh mục</label>
+            <input type="text" name="name" id="category-name" class="form-control" placeholder="Nhập tên danh mục">
+          </div>
+          <div class="form-group">
+            <label for="category-description" class="form-label">Mô tả</label>
+            <textarea id="category-description" name="description" class="form-control" rows="3" placeholder="Nhập mô tả danh mục"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-cancel" id="cancel-btn">Hủy</button>
+        <button class="btn btn-save" id="save-category-btn">Lưu</button>
+      </div>
+    </div>
+  </div>
+  <!-- Delete Form -->
+  <form style="display: none;" id="delete-form" action="" method="post"></form>
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-overlay" id="delete-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Xác nhận xóa</h3>
+        <button class="modal-close" id="close-delete-modal">×</button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn có chắc chắn muốn xóa danh mục này không? Hành động này đồng nghĩa với xóa tất cả sản phẩm có danh mục này !!!.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-cancel" id="cancel-delete-btn">Hủy</button>
+        <button class="btn btn-delete" id="confirm-delete-btn">Xóa</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+
+      // Category Modal
+      const categoryModal = document.getElementById('category-modal');
+      const addCategoryBtn = document.getElementById('add-category-btn');
+      const closeModal = document.getElementById('close-modal');
+      const cancelBtn = document.getElementById('cancel-btn');
+      const modalTitle = document.getElementById('modal-title');
+      const categoryForm = document.getElementById('category-form');
+
+      addCategoryBtn.addEventListener('click', function() {
+        modalTitle.textContent = 'Thêm danh mục mới';
+        categoryForm.action = `/admin/category/new/edit`
+        categoryForm.reset();
+        categoryModal.style.display = 'flex';
+      });
+
+      closeModal.addEventListener('click', function() {
+        categoryModal.style.display = 'none';
+      });
+
+      cancelBtn.addEventListener('click', function() {
+        categoryModal.style.display = 'none';
+      });
+
+      // Edit Category
+      const editCategoryBtns = document.querySelectorAll('.edit-category-btn');
+
+      editCategoryBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const categoryId = this.getAttribute('data-id');
+          modalTitle.textContent = 'Chỉnh sửa danh mục';
+
+          // Giả lập lấy dữ liệu danh mục theo ID
+          // Trong thực tế, bạn sẽ gọi API để lấy dữ liệu
+
+
+          const main = this.parentElement.parentElement.parentElement
+
+          const name = main.querySelector("#name").textContent
+          const description = main.querySelector("#description").textContent
+          const categoryData = {
+            name: name,
+            description: description
+          }
+
+          categoryForm.action = `/admin/category/${categoryId}/edit`
+
+          // Điền dữ liệu vào form
+          document.getElementById('category-name').value = categoryData.name;
+          document.getElementById('category-description').value = categoryData.description;
+
+          categoryModal.style.display = 'flex';
+        });
+      });
+
+      // Delete Category
+      const deleteModal = document.getElementById('delete-modal');
+      const deleteCategoryBtns = document.querySelectorAll('.delete-category-btn');
+      const closeDeleteModal = document.getElementById('close-delete-modal');
+      const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+      const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+      let categoryToDelete = null;
+
+      deleteCategoryBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          categoryToDelete = this.getAttribute('data-id');
+          deleteModal.style.display = 'flex';
+        });
+      });
+
+      closeDeleteModal.addEventListener('click', function() {
+        deleteModal.style.display = 'none';
+      });
+
+      cancelDeleteBtn.addEventListener('click', function() {
+        deleteModal.style.display = 'none';
+      });
+
+
+      const deleteFrom = document.getElementById("delete-form")
+
+      confirmDeleteBtn.addEventListener('click', function() {
+        // Giả lập xóa danh mục
+        // Trong thực tế, bạn sẽ gọi API để xóa danh mục
+        deleteFrom.action = `/admin/category/${categoryToDelete}/delete`
+        // Đóng modal và làm mới trang
+        deleteModal.style.display = 'none';
+        deleteFrom.submit()
+        // window.location.reload();
+      });
+
+      // Lưu danh mục
+      const saveCategoryBtn = document.getElementById('save-category-btn');
+
+      saveCategoryBtn.addEventListener('click', function() {
+        // Lấy dữ liệu từ form
+        const categoryName = document.getElementById('category-name').value;
+        const categoryDescription = document.getElementById('category-description').value;
+
+        // Kiểm tra dữ liệu
+        if (!categoryName) {
+          alert('Vui lòng nhập tên danh mục!');
+          return;
+        }
+        // Đóng modal và làm mới trang
+        categoryModal.style.display = 'none';
+
+        categoryForm.submit()
+        // window.location.reload();
+      });
+
+
+      // Tìm kiếm danh mục
+      const searchInput = document.querySelector('.search-input');
+
+      searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const tableRows = document.querySelectorAll('.data-table tbody tr');
+
+        tableRows.forEach(row => {
+          const categoryName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+          const categoryDescription = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+
+          if (categoryName.includes(searchTerm) || categoryDescription.includes(searchTerm)) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      });
+
+    });
+  </script>
+</body>

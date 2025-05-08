@@ -1,0 +1,181 @@
+<link rel="stylesheet" href="/css/admin/products.css">
+<div class="dashboard section-content products-section" id="products-section">
+  <div class="products-header">
+    <h1 class="page-title">Quản lý sản phẩm</h1>
+    <button class="add-product-btn" id="add-product-btn">
+      <i class="fas fa-plus"></i> Thêm sản phẩm
+    </button>
+  </div>
+
+  <div class="product-filters">
+    <select class="filter-item">
+      <option value="">Tất cả danh mục</option>
+      <option value="electronics">Điện tử</option>
+      <option value="clothing">Thời trang</option>
+      <option value="home">Đồ gia dụng</option>
+      <option value="beauty">Làm đẹp</option>
+    </select>
+    <select class="filter-item">
+      <option value="">Sắp xếp theo</option>
+      <option value="name-asc">Tên (A-Z)</option>
+      <option value="name-desc">Tên (Z-A)</option>
+      <option value="price-asc">Giá (Thấp-Cao)</option>
+      <option value="price-desc">Giá (Cao-Thấp)</option>
+    </select>
+    <input type="text" class="filter-item" placeholder="Tìm kiếm sản phẩm...">
+  </div>
+
+  <div class="product-grid">
+    <% products.forEach((product, index)=>{%>
+    <div class="product-card">
+      <div style="display: none;" class="data" data-photos="<%= JSON.stringify(product.photos)%>" data-description="<%= product.description%>"></div>
+      <img src="<%= product.preview%>" alt="Product" class="product-image">
+      <div class="product-details">
+        <div class="product-name"><%= product.name%></div>
+        <div class="product-category" data-category="<%=product.category._id%>"><%= product.category.name%></div>
+        <div class="product-price"><%= product.price%></div>
+        <div class="product-stock"><span class="in-stock">Còn hàng (25)</span></div>
+        <div class="product-actions">
+          <button class="product-btn edit-btn" data-id="<%= product._id%>">Sửa</button>
+          <button class="product-btn delete-btn" data-id="<%= product._id%>">Xóa</button>
+        </div>
+      </div>
+    </div>
+    <%})%>
+
+  </div>
+</div>
+
+
+<div class="modal" id="add-product-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">Thêm sản phẩm mới</div>
+      <button class="close-modal">&times;</button>
+    </div>
+    <form method="post" action="/admin/products/:id/edit" id="add-product-form">
+      <div class="form-group">
+        <label for="product-name">Tên sản phẩm</label>
+        <input type="text" name="name" id="product-name" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="product-category">Danh mục</label>
+        <select id="product-category" name="category" class="form-control" required>
+          <option value="">Chọn danh mục</option>
+          <% categorys.forEach((category)=>{%>
+          <option value="<%= category._id%>"><%= category.name%></option>
+          <%})%>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="product-price">Giá (₫)</label>
+        <input type="number" name="price" id="product-price" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="product-stock">Số lượng</label>
+        <input type="number" name="amount" id="product-stock" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="product-description">Mô tả</label>
+        <textarea id="product-description" name="description" class="form-control" rows="4"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="product-image">Hình ảnh</label>
+        <textarea id="product-photos" name="photos" class="form-control" rows="4"></textarea>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="cancel-btn" id="cancel-add-product">Hủy</button>
+        <button type="submit" class="save-btn">Lưu</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  const addProductBtn = document.getElementById('add-product-btn');
+  const addProductModal = document.getElementById('add-product-modal');
+  const closeModal = document.querySelector('.close-modal');
+  const cancelAddProduct = document.getElementById('cancel-add-product');
+  const popupForm = document.getElementById('add-product-form')
+
+  addProductBtn.addEventListener('click', function() {
+    addProductModal.style.display = 'flex';
+    popupForm.action = `/admin/products/new/edit`
+    popupForm.reset()
+  });
+
+  closeModal.addEventListener('click', function() {
+    addProductModal.style.display = 'none';
+  });
+
+  cancelAddProduct.addEventListener('click', function() {
+    addProductModal.style.display = 'none';
+  });
+
+  // window.addEventListener('click', function(event) {
+  //   if (event.target === addProductModal) {
+  //     addProductModal.style.display = 'none';
+  //   }
+  // });
+
+  // Add Product Form Submit
+  
+  popupForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+
+    addProductModal.style.display = 'none';
+    let photos = document.getElementById('product-photos')
+    photos.value = JSON.stringify(photos.value.split('\n'))
+
+    popupForm.submit()
+    this.reset();
+  });
+
+
+  const editBtns = document.querySelectorAll(".edit-btn")
+  const deleteBtns = document.querySelectorAll(".delete-btn")
+  editBtns.forEach((btn) => {
+    btn.addEventListener('click', function() {
+      const productId = this.getAttribute('data-id');
+      popupForm.action= `/admin/products/${productId}/edit`
+      const cardProduct = this.parentElement.parentElement.parentElement
+
+
+      const preview = cardProduct.querySelector("img").src
+      const name = cardProduct.querySelector(".product-name").textContent
+      const category = cardProduct.querySelector(".product-category").dataset.category
+      const price = cardProduct.querySelector(".product-price").textContent
+      const data = cardProduct.querySelector(".data").dataset
+      const photos = JSON.parse(data.photos)
+      
+      
+
+      document.getElementById('product-name').value = name
+      document.getElementById('product-category').value = category
+      document.getElementById('product-price').value = price
+      document.getElementById('product-stock').value = 5
+      document.getElementById('product-description').value = data.description
+      
+      let photoString = ''
+      photos.forEach((img, index)=>{
+        if(index!== photos.length - 1){
+
+          photoString +=img+"\n"
+        }else{
+          photoString +=img
+        }
+      })
+      document.getElementById('product-photos').value = photoString
+
+
+
+
+
+
+      addProductModal.style.display = 'flex';
+
+
+    })
+  })
+</script>

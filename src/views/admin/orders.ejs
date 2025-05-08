@@ -1,0 +1,120 @@
+<style>
+    
+</style>
+
+<div class="dashboard section-content orders-section" id="orders-section">
+    <h1 class="page-title">Quản lý đơn hàng</h1>
+    
+    <div class="order-filters">
+        <select class="filter-item">
+            <option value="">Tất cả trạng thái</option>
+            <option value="pending">Chờ thanh toán</option>
+            <option value="processing">Đang xử lý</option>
+            <option value="completed">Hoàn thành</option>
+            <option value="cancelled">Đã hủy</option>
+        </select>
+        <input type="date" class="filter-item">
+        <input type="text" class="filter-item" placeholder="Tìm kiếm đơn hàng...">
+    </div>
+    
+    <div class="recent-orders">
+        <table>
+            <thead>
+                <tr>
+                    <th>Mã đơn hàng</th>
+                    <th>Khách hàng</th>
+                    <th>Ngày đặt</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>#ORD-0123</td>
+                    <td>Nguyễn Văn A</td>
+                    <td>15/05/2023</td>
+                    <td>1,250,000 ₫</td>
+                    <td><span class="status completed">Hoàn thành</span></td>
+                    <td>
+                        <button class="action-btn"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#ORD-0122</td>
+                    <td>Trần Thị B</td>
+                    <td>14/05/2023</td>
+                    <td>850,000 ₫</td>
+                    <td><span class="status processing">Đang xử lý</span></td>
+                    <td>
+                        <button class="action-btn"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#ORD-0121</td>
+                    <td>Lê Văn C</td>
+                    <td>13/05/2023</td>
+                    <td>2,150,000 ₫</td>
+                    <td><span class="status pending">Chờ thanh toán</span></td>
+                    <td>
+                        <button class="action-btn"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#ORD-0120</td>
+                    <td>Phạm Thị D</td>
+                    <td>12/05/2023</td>
+                    <td>750,000 ₫</td>
+                    <td><span class="status completed">Hoàn thành</span></td>
+                    <td>
+                        <button class="action-btn"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#ORD-0119</td>
+                    <td>Hoàng Văn E</td>
+                    <td>11/05/2023</td>
+                    <td>1,550,000 ₫</td>
+                    <td><span class="status processing">Đang xử lý</span></td>
+                    <td>
+                        <button class="action-btn"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#ORD-0118</td>
+                    <td>Vũ Thị F</td>
+                    <td>10/05/2023</td>
+                    <td>950,000 ₫</td>
+                    <td><span class="status completed">Hoàn thành</span></td>
+                    <td>
+                        <button class="action-btn"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#ORD-0117</td>
+                    <td>Đặng Văn G</td>
+                    <td>09/05/2023</td>
+                    <td>2,350,000 ₫</td>
+                    <td><span class="status pending">Chờ thanh toán</span></td>
+                    <td>
+                        <button class="action-btn"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

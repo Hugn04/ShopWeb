@@ -1,0 +1,34 @@
+<link rel="stylesheet" href="/css/contentDetails.css">
+<div id="containerProduct">
+    <div id="containerD">
+        <div id="imageSection"><img id="imgDetails" src="<%= product.preview%>">
+        </div>
+        <div id="productDetails">
+            <h1>
+                <%= product.name%>
+            </h1>
+            <h4>
+                <%= product.brand%>
+            </h4>
+            <div id="details">
+                <h3>
+                    <%= product.price%>đ
+                </h3>
+                <h3>Mô tả</h3>
+                <p>
+                    <%= product.description%>
+                </p>
+            </div>
+            <div id="productPreview">
+                <h3>Xem trước sản phẩm</h3>
+                <% product.photos.forEach((src, index)=>{%>
+                    <img src="<%= src%>">
+
+                    <%})%>
+            </div>
+            <div id="button"><button>Thêm vào giỏ hàng</button></div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/contentDetails2.js"></script>

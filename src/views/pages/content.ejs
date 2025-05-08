@@ -1,0 +1,53 @@
+<link rel="stylesheet" href="css/content.css">
+<%- include('banner') %>
+<div id="mainContainer">
+  <h1> Sản phẩm bản chạy </h1>
+  <div id="containerClothing">
+    <% notAccessory.forEach((item)=>{%>
+    <div id="box">
+      <a href="/product/<%= item._id%>"><img src=<%=item.preview%>>
+        <div id="details">
+          <h3>
+            <%= item.name%>
+          </h3>
+          <h4>
+            <%= item.category.name%>
+          </h4>
+          <h2>
+            <%= item.price%>
+          </h2>
+        </div>
+      </a>
+    </div>
+    <%})%>
+  </div>
+  <hr>
+  <h1> Sản phẩm mới</h1>
+  <div id="containerAccessories">
+    <% accessory.forEach((item)=>{%>
+    <div id="box">
+      <a href="/product/<%= item._id%>"><img src=<%=item.preview%>>
+        <div id="details">
+          <h3>
+            <%= item.name%>
+          </h3>
+          <h4>
+            <%= item.brand%>
+          </h4>
+          <h2>
+            <%= item.price%>
+          </h2>
+        </div>
+      </a>
+    </div>
+    <%})%>
+  </div>
+
+</div>
+<!-- <script src="js/content.js"></script> -->
+<script>
+  const accessory = []
+  accessory.forEach((item) => {
+
+  })
+</script>

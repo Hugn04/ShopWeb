@@ -1,0 +1,122 @@
+<style>
+  .customer-card {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 15px;
+  }
+
+  .customer-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+  }
+
+  .customer-info {
+    flex: 1;
+  }
+
+  .customer-name {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+
+  .customer-email {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 5px;
+  }
+
+  .customer-orders {
+    font-size: 0.8rem;
+  }
+
+  .customer-actions {
+    display: flex;
+    gap: 10px;
+  }
+</style>
+
+<div class="dashboard section-content customers-section" id="customers-section">
+  <h1 class="page-title">Quản lý khách hàng</h1>
+
+  <div class="order-filters">
+    <select class="filter-item">
+      <option value="">Sắp xếp theo</option>
+      <option value="name-asc">Tên (A-Z)</option>
+      <option value="name-desc">Tên (Z-A)</option>
+      <option value="orders-desc">Đơn hàng (Cao-Thấp)</option>
+      <option value="orders-asc">Đơn hàng (Thấp-Cao)</option>
+    </select>
+    <input type="text" class="filter-item" placeholder="Tìm kiếm khách hàng...">
+  </div>
+
+  <div class="customer-list">
+    <div class="customer-card">
+      <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Customer" class="customer-avatar">
+      <div class="customer-info">
+        <div class="customer-name">Nguyễn Văn A</div>
+        <div class="customer-email">nguyenvana@example.com</div>
+        <div class="customer-orders">12 đơn hàng | 5,250,000 ₫</div>
+      </div>
+      <div class="customer-actions">
+        <button class="product-btn edit-btn">Chi tiết</button>
+        <button class="product-btn delete-btn">Xóa</button>
+      </div>
+    </div>
+    <div class="customer-card">
+      <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="Customer" class="customer-avatar">
+      <div class="customer-info">
+        <div class="customer-name">Trần Thị B</div>
+        <div class="customer-email">tranthib@example.com</div>
+        <div class="customer-orders">8 đơn hàng | 3,850,000 ₫</div>
+      </div>
+      <div class="customer-actions">
+        <button class="product-btn edit-btn">Chi tiết</button>
+        <button class="product-btn delete-btn">Xóa</button>
+      </div>
+    </div>
+    <div class="customer-card">
+      <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Customer" class="customer-avatar">
+      <div class="customer-info">
+        <div class="customer-name">Lê Văn C</div>
+        <div class="customer-email">levanc@example.com</div>
+        <div class="customer-orders">5 đơn hàng | 4,150,000 ₫</div>
+      </div>
+      <div class="customer-actions">
+        <button class="product-btn edit-btn">Chi tiết</button>
+        <button class="product-btn delete-btn">Xóa</button>
+      </div>
+    </div>
+    <div class="customer-card">
+      <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Customer" class="customer-avatar">
+      <div class="customer-info">
+        <div class="customer-name">Phạm Thị D</div>
+        <div class="customer-email">phamthid@example.com</div>
+        <div class="customer-orders">3 đơn hàng | 1,750,000 ₫</div>
+      </div>
+      <div class="customer-actions">
+        <button class="product-btn edit-btn">Chi tiết</button>
+        <button class="product-btn delete-btn">Xóa</button>
+      </div>
+    </div>
+    <div class="customer-card">
+      <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Customer" class="customer-avatar">
+      <div class="customer-info">
+        <div class="customer-name">Hoàng Văn E</div>
+        <div class="customer-email">hoangvane@example.com</div>
+        <div class="customer-orders">7 đơn hàng | 6,550,000 ₫</div>
+      </div>
+      <div class="customer-actions">
+        <button class="product-btn edit-btn">Chi tiết</button>
+        <button class="product-btn delete-btn">Xóa</button>
+      </div>
+    </div>
+  </div>
+</div>
