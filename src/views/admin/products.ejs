@@ -34,7 +34,13 @@
         <div class="product-name"><%= product.name%></div>
         <div class="product-category" data-category="<%=product.category._id%>"><%= product.category.name%></div>
         <div class="product-price"><%= product.price%></div>
-        <div class="product-stock"><span class="in-stock">Còn hàng (25)</span></div>
+        <div class="product-stock" data-amount="<%= product.amount%>"><% if(product.amount == 0){%>
+          <span class="out-of-stock">Hết hàng</span>
+          <%}else if(product.amount < 5){%>
+          <span class="low-stock">Sắp hết hàng (<%= product.amount%>)</span>
+          <%}else {%>
+          <span class="in-stock">Còn hàng (<%= product.amount%>)</span>
+          <%}%></div>
         <div class="product-actions">
           <button class="product-btn edit-btn" data-id="<%= product._id%>">Sửa</button>
           <button class="product-btn delete-btn" data-id="<%= product._id%>">Xóa</button>
@@ -90,28 +96,51 @@
     </form>
   </div>
 </div>
+<!-- Delete Model -->
+<div class="modal" id="delete-modal">
+  <div class="modal-content" style="width: 500px;">
+    <div class="modal-header">
+      <div class="modal-title">Xóa sản phẩm</div>
+      <button class="close-modal">&times;</button>
+    </div>
+    <form method="post" action="/admin/products/:id/delete" id="delete-form">
+      <p>Bạn có muốn xóa sản phẩm này ko</p>
+      <div class="form-actions">
+        <button type="button" class="cancel-btn" id="cancel-add-product">Hủy</button>
+        <button type="submit" class="save-btn" style="background-color: red;">Xóa</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <script>
   const addProductBtn = document.getElementById('add-product-btn');
-  const addProductModal = document.getElementById('add-product-modal');
-  const closeModal = document.querySelector('.close-modal');
-  const cancelAddProduct = document.getElementById('cancel-add-product');
-  const popupForm = document.getElementById('add-product-form')
 
   addProductBtn.addEventListener('click', function() {
     addProductModal.style.display = 'flex';
-    popupForm.action = `/admin/products/new/edit`
-    popupForm.reset()
+    editForm.action = `/admin/products/new/edit`
+    editForm.reset()
   });
 
-  closeModal.addEventListener('click', function() {
-    addProductModal.style.display = 'none';
-  });
+  
+  const closeModals = document.querySelectorAll('.close-modal');
+  closeModals.forEach(function(closeModal) {
+    const model = closeModal.parentElement.parentElement.parentElement
+    closeModal.addEventListener('click', function() {
+      model.style.display = 'none';
+    });
 
-  cancelAddProduct.addEventListener('click', function() {
-    addProductModal.style.display = 'none';
-  });
+  })
+  const cancelModels = document.querySelectorAll('.cancel-btn');
+  cancelModels.forEach(function(cancelModel) {
+    const model = cancelModel.parentElement.parentElement.parentElement.parentElement
+    cancelModel.addEventListener('click', function() {
+      model.style.display = 'none';
+    });
+  })
+  
 
+  
   // window.addEventListener('click', function(event) {
   //   if (event.target === addProductModal) {
   //     addProductModal.style.display = 'none';
@@ -119,8 +148,9 @@
   // });
 
   // Add Product Form Submit
-  
-  popupForm.addEventListener('submit', function(e) {
+  const addProductModal = document.getElementById('add-product-modal');
+  const editForm = document.getElementById('add-product-form')
+  editForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
 
@@ -128,7 +158,7 @@
     let photos = document.getElementById('product-photos')
     photos.value = JSON.stringify(photos.value.split('\n'))
 
-    popupForm.submit()
+    editForm.submit()
     this.reset();
   });
 
@@ -138,44 +168,44 @@
   editBtns.forEach((btn) => {
     btn.addEventListener('click', function() {
       const productId = this.getAttribute('data-id');
-      popupForm.action= `/admin/products/${productId}/edit`
+      editForm.action = `/admin/products/${productId}/edit`
       const cardProduct = this.parentElement.parentElement.parentElement
-
-
       const preview = cardProduct.querySelector("img").src
       const name = cardProduct.querySelector(".product-name").textContent
       const category = cardProduct.querySelector(".product-category").dataset.category
+      const amount = cardProduct.querySelector(".product-stock").dataset.amount
       const price = cardProduct.querySelector(".product-price").textContent
       const data = cardProduct.querySelector(".data").dataset
       const photos = JSON.parse(data.photos)
-      
-      
 
       document.getElementById('product-name').value = name
       document.getElementById('product-category').value = category
       document.getElementById('product-price').value = price
-      document.getElementById('product-stock').value = 5
+      document.getElementById('product-stock').value = amount
       document.getElementById('product-description').value = data.description
-      
-      let photoString = ''
-      photos.forEach((img, index)=>{
-        if(index!== photos.length - 1){
 
-          photoString +=img+"\n"
-        }else{
-          photoString +=img
+      let photoString = ''
+      photos.forEach((img, index) => {
+        if (index !== photos.length - 1) {
+
+          photoString += img + "\n"
+        } else {
+          photoString += img
         }
       })
       document.getElementById('product-photos').value = photoString
-
-
-
-
-
-
       addProductModal.style.display = 'flex';
-
-
     })
   })
+  const deleteModel = document.getElementById('delete-modal');
+  const deleteForm = document.getElementById('delete-form');
+ 
+  deleteBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      const productId = this.getAttribute('data-id');
+      deleteForm.action = `/admin/products/${productId}/delete`
+      
+      deleteModel.style.display = 'flex';
+    });
+  });
 </script>

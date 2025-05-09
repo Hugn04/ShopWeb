@@ -84,7 +84,7 @@ class AdminController {
                 req.flash('success', 'Sửa sản phẩm thành công !');
             }
 
-            res.redirect('/admin/products');
+            return res.redirect('/admin/products');
         } catch (error) {
             console.log(error);
 
