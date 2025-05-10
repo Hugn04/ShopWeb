@@ -1,20 +1,20 @@
 <link rel="stylesheet" href="css/content.css">
 <%- include('banner') %>
 <div id="mainContainer">
-  <h1> Sản phẩm bản chạy </h1>
-  <div id="containerClothing">
+  <h1> Sản phẩm bán chạy </h1>
+  <div class="containerProductGrid">
     <% notAccessory.forEach((item)=>{%>
     <div id="box">
       <a href="/product/<%= item._id%>"><img src=<%=item.preview%>>
         <div id="details">
-          <h3>
+          <h3 class="name">
             <%= item.name%>
           </h3>
-          <h4>
+          <h4 class="category">
             <%= item.category.name%>
           </h4>
-          <h2>
-            <%= item.price%>
+          <h2 class="price">
+            <%= formatVND(item.price)%>
           </h2>
         </div>
       </a>
@@ -23,19 +23,19 @@
   </div>
   <hr>
   <h1> Sản phẩm mới</h1>
-  <div id="containerAccessories">
+  <div class="containerProductGrid">
     <% accessory.forEach((item)=>{%>
     <div id="box">
       <a href="/product/<%= item._id%>"><img src=<%=item.preview%>>
         <div id="details">
-          <h3>
+          <h3 class="name">
             <%= item.name%>
           </h3>
-          <h4>
+          <h4 class="category">
             <%= item.brand%>
           </h4>
-          <h2>
-            <%= item.price%>
+          <h2 class="price">
+            <%= formatVND(item.price)%>
           </h2>
         </div>
       </a>

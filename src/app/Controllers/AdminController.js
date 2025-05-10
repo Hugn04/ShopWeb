@@ -1,6 +1,9 @@
 const { addProductService, deleteProductService, updateProductService } = require('../../services/ProductService');
+const formatDate = require('../../util/formatDate');
+const formatVND = require('../../util/formatVND');
 const { multipleMongooseToObject, mongooseToObject } = require('../../util/mongoose');
 const Category = require('../Model/Category');
+const Orders = require('../Model/Orders');
 
 const Product = require('../Model/Product');
 const User = require('../Model/User');
@@ -8,8 +11,9 @@ const User = require('../Model/User');
 class AdminController {
     async index(req, res) {
         try {
-            const customerCount = await User.countDocuments();
+            const customerCount = await User.countDocuments({ role: 'user' });
             const productCount = await Product.countDocuments();
+            const orderCount = await Orders.countDocuments();
             const result = await Product.aggregate([
                 {
                     $lookup: {
@@ -29,13 +33,13 @@ class AdminController {
             ]);
 
             const chart = [result.map((item) => item._id), result.map((item) => item.totalSold)];
-     
 
             res.render('admin/dashboard', {
                 layout: 'layouts/admin',
                 title: 'Admin Dashbroard',
                 productCount,
                 customerCount,
+                orderCount,
                 chart,
                 error: req.flash('error'),
                 success: req.flash('success'),
@@ -47,13 +51,20 @@ class AdminController {
         }
     }
     async products(req, res) {
+        const query = req.query;
+        let filter = {};
+        if (query.category) {
+            filter = { ...filter, category: query.category };
+        }
+
         try {
-            const products = await Product.find();
+            const products = await Product.find(filter);
             const categorys = await Category.find();
             res.render('admin/products', {
                 layout: 'layouts/admin',
                 products,
                 categorys,
+                formatVND,
                 title: 'Admin Products',
                 error: req.flash('error'),
                 success: req.flash('success'),
@@ -66,6 +77,7 @@ class AdminController {
             });
         }
     }
+    // Product
     async updateProduct(req, res) {
         const data = req.body;
         const photos = JSON.parse(data.photos);
@@ -98,28 +110,69 @@ class AdminController {
             success: req.flash('success'),
         });
     }
-    orders(req, res) {
-        res.render('admin/orders', {
-            layout: 'layouts/admin',
-            title: 'Admin Orders',
-            error: req.flash('error'),
-            success: req.flash('success'),
-        });
+    async deleteProduct(req, res) {
+        try {
+            const slug = req.params.id;
+            await deleteProductService(slug);
+            req.flash('success', 'Xóa sản phẩm thành công !');
+            res.redirect('/admin/products');
+        } catch (error) {
+            console.log(error);
+            req.flash('success', 'Xóa sản phẩm thất bại !');
+            res.redirect('/admin/products');
+        }
     }
-    customer(req, res) {
-        res.render('admin/customer', {
-            layout: 'layouts/admin',
-            title: 'Admin Customer',
-            error: req.flash('error'),
-            success: req.flash('success'),
-        });
+    async orders(req, res) {
+        try {
+            const orders = await Orders.find();
+            res.render('admin/orders', {
+                layout: 'layouts/admin',
+                orders,
+                formatVND,
+                formatDate,
+                title: 'Admin Orders',
+                error: req.flash('error'),
+                success: req.flash('success'),
+            });
+        } catch (error) {}
+    }
+    async customer(req, res) {
+        try {
+            const customers = await User.find({ role: 'user' });
+            console.log(customers);
+
+            res.render('admin/customer', {
+                layout: 'layouts/admin',
+                title: 'Admin Customer',
+                customers,
+                error: req.flash('error'),
+                success: req.flash('success'),
+            });
+        } catch (error) {
+            res.render('admin/customer', {
+                layout: 'layouts/admin',
+                title: 'Admin Customer',
+                error: req.flash('error'),
+                success: req.flash('success'),
+            });
+        }
     }
     async category(req, res) {
         try {
             const categorys = await Category.find();
+
+            const categoryWithCount = await Promise.all(
+                categorys.map(async (category) => {
+                    const count = await Product.countDocuments({ category: category._id });
+                    return {
+                        ...category.toObject(),
+                        count,
+                    };
+                }),
+            );
             res.render('admin/category', {
                 layout: 'layouts/admin',
-                categorys,
+                categorys:categoryWithCount,
                 title: 'Admin Category',
                 error: req.flash('error'),
                 success: req.flash('success'),
@@ -174,52 +227,6 @@ class AdminController {
             error: req.flash('error'),
             success: req.flash('success'),
         });
-    }
-    async addProduct(req, res) {
-        try {
-            const data = req.body;
-            addProductService(data);
-            req.session.error = 'Thêm sản phẩm thành công !';
-            res.redirect('/admin');
-        } catch (error) {
-            console.log(error);
-
-            res.redirect('/admin');
-        }
-    }
-
-    async edit(req, res) {
-        const product = await Product.findOne({ slug: req.params.slug });
-        res.render('admin/edit', {
-            product: mongooseToObject(product),
-        });
-    }
-    async editProduct(req, res) {
-        try {
-            const data = req.body;
-            const slug = req.params.slug;
-            await updateProductService({ slug, ...data });
-            req.session.error = 'Sửa sản phẩm thành công !';
-            res.redirect('/admin');
-        } catch (error) {
-            console.log(error);
-
-            req.session.error = 'Sửa sản phẩm thất bại !';
-            res.redirect('/admin');
-        }
-    }
-    async deleteProduct(req, res) {
-        try {
-            const slug = req.params.slug;
-            await deleteProductService(slug);
-            req.session.error = 'Xóa sản phẩm thành công !';
-            res.redirect('/admin');
-        } catch (error) {
-            console.log(error);
-
-            req.session.error = 'Xóa sản phẩm thất bại !';
-            res.redirect('/admin');
-        }
     }
 }
 const adminController = new AdminController();

@@ -169,34 +169,6 @@
       align-items: center;
     }
 
-    .notification,
-    .user-profile {
-      margin-left: 20px;
-      position: relative;
-      cursor: pointer;
-    }
-
-    .notification i,
-    .user-profile i {
-      font-size: 1.2rem;
-      color: var(--text-color);
-    }
-
-    .notification-badge {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      background-color: var(--danger-color);
-      color: white;
-      border-radius: 50%;
-      width: 18px;
-      height: 18px;
-      font-size: 0.7rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
     .user-profile img {
       width: 35px;
       height: 35px;
@@ -552,10 +524,7 @@
         <input type="text" placeholder="Tìm kiếm...">
       </div>
       <div class="header-right">
-        <div class="notification">
-          <i class="fas fa-bell"></i>
-          <span class="notification-badge">3</span>
-        </div>
+       
         <div class="user-profile">
           <img src="<%= user.avatar%>>" alt="User Profile">
         </div>
@@ -584,6 +553,8 @@
       document.querySelector('.sidebar').classList.toggle('active');
       document.querySelector('.main-content').classList.toggle('sidebar-active');
     });
+
+    
   </script>
 </body>
 

@@ -1,34 +1,69 @@
 <link rel="stylesheet" href="/css/contentDetails.css">
 <div id="containerProduct">
-    <div id="containerD">
-        <div id="imageSection"><img id="imgDetails" src="<%= product.preview%>">
-        </div>
-        <div id="productDetails">
-            <h1>
-                <%= product.name%>
-            </h1>
-            <h4>
-                <%= product.brand%>
-            </h4>
-            <div id="details">
-                <h3>
-                    <%= product.price%>đ
-                </h3>
-                <h3>Mô tả</h3>
-                <p>
-                    <%= product.description%>
-                </p>
-            </div>
-            <div id="productPreview">
-                <h3>Xem trước sản phẩm</h3>
-                <% product.photos.forEach((src, index)=>{%>
-                    <img src="<%= src%>">
-
-                    <%})%>
-            </div>
-            <div id="button"><button>Thêm vào giỏ hàng</button></div>
-        </div>
+  <div id="containerD">
+    <div id="imageSection"><img id="imgDetails" src="<%= product.preview%>">
     </div>
+    <div id="productDetails">
+      <h1>
+        <%= product.name%>
+      </h1>
+      <h4>
+        <%= product.brand%>
+      </h4>
+      <div id="details">
+        <h3>
+          <%= formatVND(product.price)%>
+        </h3>
+        <h3>Mô tả</h3>
+        <p>
+          <%= product.description%>
+        </p>
+      </div>
+      <div id="productPreview">
+        <h3>Xem trước sản phẩm</h3>
+        <% product.photos.forEach((src, index)=>{%>
+        <img src="<%= src%>">
+        <%})%>
+      </div>
+      <div id="button"><button id="add-to-card">Thêm vào giỏ hàng</button></div>
+    </div>
+  </div>
+</div>
+<hr>
+<h1 id="title"> Sản phẩm tương tự</h1>
+<div class="containerProductGrid">
+  <% similars.forEach((item)=>{%>
+    <div id="box">
+      <a href="/product/<%= item._id%>"><img src=<%=item.preview%>>
+        <div id="detail">
+          <h3 class="name">
+            <%= item.name%>
+          </h3>
+          <h4 class="category">
+            <%= item.category.name%>
+          </h4>
+          <h2 class="price">
+            <%= formatVND(item.price)%>
+          </h2>
+        </div>
+      </a>
+    </div>
+    <%})%>
+
 </div>
 
+<form style="display: none;" action="/product/add-to-cart/:id" method="post" id="form-add-to-cart">
+
+</form>
+<div id="data" data-id="<%= product._id%>"></div>
+<script>
+  const formAddToCart = document.getElementById("form-add-to-cart")
+  const btnAddToCart = document.getElementById("add-to-card")
+  const data = document.getElementById("data")
+  btnAddToCart.addEventListener('click', function() {
+    formAddToCart.action = `/product/add-to-cart/${data.dataset.id}`
+    formAddToCart.submit()
+
+  })
+</script>
 <script src="/js/contentDetails2.js"></script>

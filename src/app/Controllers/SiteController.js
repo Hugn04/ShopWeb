@@ -1,3 +1,4 @@
+const formatVND = require('../../util/formatVND');
 const Product = require('../Model/Product');
 
 class SiteController {
@@ -10,6 +11,7 @@ class SiteController {
             res.render('pages/content', {
                 accessory,
                 notAccessory,
+                formatVND,
                 error: req.flash('error'),
                 success: req.flash('success'),
             });

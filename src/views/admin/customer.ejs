@@ -57,12 +57,15 @@
     <input type="text" class="filter-item" placeholder="Tìm kiếm khách hàng...">
   </div>
 
+
+
   <div class="customer-list">
+    <% customers.forEach((customer)=>{%>
     <div class="customer-card">
-      <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Customer" class="customer-avatar">
+      <img src="<%= customer.avatar%>" alt="Customer" class="customer-avatar">
       <div class="customer-info">
-        <div class="customer-name">Nguyễn Văn A</div>
-        <div class="customer-email">nguyenvana@example.com</div>
+        <div class="customer-name"><%= customer.name%></div>
+        <div class="customer-email"><%= customer.email%></div>
         <div class="customer-orders">12 đơn hàng | 5,250,000 ₫</div>
       </div>
       <div class="customer-actions">
@@ -70,53 +73,8 @@
         <button class="product-btn delete-btn">Xóa</button>
       </div>
     </div>
-    <div class="customer-card">
-      <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="Customer" class="customer-avatar">
-      <div class="customer-info">
-        <div class="customer-name">Trần Thị B</div>
-        <div class="customer-email">tranthib@example.com</div>
-        <div class="customer-orders">8 đơn hàng | 3,850,000 ₫</div>
-      </div>
-      <div class="customer-actions">
-        <button class="product-btn edit-btn">Chi tiết</button>
-        <button class="product-btn delete-btn">Xóa</button>
-      </div>
-    </div>
-    <div class="customer-card">
-      <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Customer" class="customer-avatar">
-      <div class="customer-info">
-        <div class="customer-name">Lê Văn C</div>
-        <div class="customer-email">levanc@example.com</div>
-        <div class="customer-orders">5 đơn hàng | 4,150,000 ₫</div>
-      </div>
-      <div class="customer-actions">
-        <button class="product-btn edit-btn">Chi tiết</button>
-        <button class="product-btn delete-btn">Xóa</button>
-      </div>
-    </div>
-    <div class="customer-card">
-      <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Customer" class="customer-avatar">
-      <div class="customer-info">
-        <div class="customer-name">Phạm Thị D</div>
-        <div class="customer-email">phamthid@example.com</div>
-        <div class="customer-orders">3 đơn hàng | 1,750,000 ₫</div>
-      </div>
-      <div class="customer-actions">
-        <button class="product-btn edit-btn">Chi tiết</button>
-        <button class="product-btn delete-btn">Xóa</button>
-      </div>
-    </div>
-    <div class="customer-card">
-      <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Customer" class="customer-avatar">
-      <div class="customer-info">
-        <div class="customer-name">Hoàng Văn E</div>
-        <div class="customer-email">hoangvane@example.com</div>
-        <div class="customer-orders">7 đơn hàng | 6,550,000 ₫</div>
-      </div>
-      <div class="customer-actions">
-        <button class="product-btn edit-btn">Chi tiết</button>
-        <button class="product-btn delete-btn">Xóa</button>
-      </div>
-    </div>
+    <%})%>
+
+   
   </div>
 </div>

@@ -1,6 +1,7 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const User = require('../app/Model/User');
+const Cart = require('../app/Model/Cart');
 
 const auth = async (req, res, next) => {
     //const white_list = ['/', '/login', '/register'];
@@ -9,17 +10,19 @@ const auth = async (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await User.findOne({_id:decoded.id})
+        const user = await User.findOne({ _id: decoded.id }).select('_id name avatar email role');
         res.locals.user = user;
+        const cartCount = await Cart.countDocuments({ user: user._id });
+        res.locals.cartCount = cartCount;
+
         next();
     } catch (error) {
         res.locals.user = null;
+        res.locals.cartCount = 0;
         if (white_list.includes(req.originalUrl)) {
-            res.locals.cart = { length: 0 };
-            
             next();
-        } else {    
-            req.flash('error', "Bạn phải đăng nhập mới vào được trang này !");
+        } else {
+            req.flash('error', 'Bạn phải đăng nhập mới vào được trang này !');
             res.redirect('/account');
         }
     }

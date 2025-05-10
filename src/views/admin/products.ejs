@@ -8,12 +8,11 @@
   </div>
 
   <div class="product-filters">
-    <select class="filter-item">
+    <select class="filter-item" id="category-filter">
       <option value="">Tất cả danh mục</option>
-      <option value="electronics">Điện tử</option>
-      <option value="clothing">Thời trang</option>
-      <option value="home">Đồ gia dụng</option>
-      <option value="beauty">Làm đẹp</option>
+      <% categorys.forEach((category)=>{%>
+      <option value="<%= category.id%>"><%= category.name%></option>
+      <%})%>
     </select>
     <select class="filter-item">
       <option value="">Sắp xếp theo</option>
@@ -24,7 +23,28 @@
     </select>
     <input type="text" class="filter-item" placeholder="Tìm kiếm sản phẩm...">
   </div>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentCategory = urlParams.get('category');
+    const selectEl = document.getElementById('category-filter');
+    if (currentCategory) {
+      selectEl.value = currentCategory;
+    }
 
+    // Gắn sự kiện thay đổi
+    selectEl.addEventListener('change', function() {
+      const categoryId = this.value;
+      const url = new URL(window.location.href);
+
+      if (categoryId) {
+        url.searchParams.set('category', categoryId);
+      } else {
+        url.searchParams.delete('category');
+      }
+
+      window.location.href = url.toString();
+    });
+  </script>
   <div class="product-grid">
     <% products.forEach((product, index)=>{%>
     <div class="product-card">
@@ -33,7 +53,7 @@
       <div class="product-details">
         <div class="product-name"><%= product.name%></div>
         <div class="product-category" data-category="<%=product.category._id%>"><%= product.category.name%></div>
-        <div class="product-price"><%= product.price%></div>
+        <div class="product-price" data-price="<%= product.price%>"><%= formatVND(product.price)%></div>
         <div class="product-stock" data-amount="<%= product.amount%>"><% if(product.amount == 0){%>
           <span class="out-of-stock">Hết hàng</span>
           <%}else if(product.amount < 5){%>
@@ -122,7 +142,7 @@
     editForm.reset()
   });
 
-  
+
   const closeModals = document.querySelectorAll('.close-modal');
   closeModals.forEach(function(closeModal) {
     const model = closeModal.parentElement.parentElement.parentElement
@@ -138,9 +158,9 @@
       model.style.display = 'none';
     });
   })
-  
 
-  
+
+
   // window.addEventListener('click', function(event) {
   //   if (event.target === addProductModal) {
   //     addProductModal.style.display = 'none';
@@ -174,7 +194,7 @@
       const name = cardProduct.querySelector(".product-name").textContent
       const category = cardProduct.querySelector(".product-category").dataset.category
       const amount = cardProduct.querySelector(".product-stock").dataset.amount
-      const price = cardProduct.querySelector(".product-price").textContent
+      const price = cardProduct.querySelector(".product-price").dataset.price
       const data = cardProduct.querySelector(".data").dataset
       const photos = JSON.parse(data.photos)
 
@@ -199,12 +219,12 @@
   })
   const deleteModel = document.getElementById('delete-modal');
   const deleteForm = document.getElementById('delete-form');
- 
+
   deleteBtns.forEach(btn => {
     btn.addEventListener('click', function() {
       const productId = this.getAttribute('data-id');
       deleteForm.action = `/admin/products/${productId}/delete`
-      
+
       deleteModel.style.display = 'flex';
     });
   });

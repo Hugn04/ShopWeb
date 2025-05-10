@@ -8,7 +8,12 @@ const OrdersModel = new Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
     product: { type: mongoose.Schema.Types.ObjectId, ref: 'products' },
     createdAt: { type: Date, default: Date.now },
+    name:String,
+    quantity:Number,
     price: Number,
+    phone: { type: String, require },
+    address: { type: String, require },
+    nodes: String,
     status: {
         type: String,
         enum: ['pending', 'completed', 'cancelled'],

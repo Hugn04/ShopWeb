@@ -14,11 +14,11 @@ const addProductService = async ({ name, preview, photos, description, size, isA
     });
     return product;
 };
-const deleteProductService = async (slug) => {
+const deleteProductService = async (id) => {
     try {
-        const product = await Product.findOne({ slug: slug });
+        const product = await Product.findOne({ _id: id });
         await Cart.deleteMany({ product: product._id });
-        await Product.deleteOne({ slug: slug });
+        await Product.deleteOne({ _id: id });
     } catch (error) {
         console.error('Lỗi:', error);
     }

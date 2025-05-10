@@ -11,14 +11,11 @@ const initData = require('../fakedata.js');
 const webRouter = Router();
 webRouter.use('*', auth);
 webRouter.use('/admin', admin);
-webRouter.post('/admin/add', adminController.addProduct);
-webRouter.post('/admin/delete/:slug', adminController.deleteProduct);
-webRouter.get('/admin/edit/:slug', adminController.edit);
-webRouter.post('/admin/edit/:slug', adminController.editProduct);
+
+
 webRouter.get('/admin/products', adminController.products)
 webRouter.post('/admin/products/:id/edit', adminController.updateProduct)
-
-
+webRouter.post('/admin/products/:id/delete', adminController.deleteProduct)
 
 webRouter.get('/admin/orders', adminController.orders)
 webRouter.get('/admin/customer', adminController.customer)
@@ -33,16 +30,23 @@ webRouter.get('/admin', adminController.index);
 webRouter.post('/register', userController.register);
 webRouter.post('/login', userController.login);
 webRouter.get('/logout', userController.logout);
+webRouter.get('/account', userController.account);
+
 webRouter.get('/cart', productController.cart);
-webRouter.post('/cart', productController.buyFromCart);
+webRouter.post('/cart/buy', productController.buyFromCart);
 webRouter.post('/cart/:id/delete', productController.removeCart);
 
+
+webRouter.post('/product/add-to-cart/:id', productController.addToCart);
+
+
+
+
 webRouter.post('/:slug/buy', productController.buy);
-webRouter.post('/product/add-to-cart/:slug', productController.addToCart);
 webRouter.get('/:slug/product', productController.index);
 webRouter.get('/products', productController.index);
 webRouter.get('/product/:id', productController.productDetail);
-webRouter.get('/account', userController.account);
+
 webRouter.get('/', siteController.index);
 
 

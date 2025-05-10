@@ -1,0 +1,552 @@
+<link rel="stylesheet" href="css/cart.css">
+
+<body>
+  <main class="container">
+    <h1 class="page-title">Giỏ hàng của bạn</h1>
+    <!-- Phần giỏ hàng -->
+    <div class="cart-container" id="cart-section">
+      <div class="cart-items">
+        <div class="cart-header">
+          <div class="select-all">
+            <input type="checkbox" id="select-all-checkbox">
+            <label for="select-all-checkbox">Chọn tất cả</label>
+          </div>
+        </div>
+        <!-- Mẫu sản phẩm trong giỏ hàng -->
+        <% carts.forEach((cart)=>{%>
+        <div class="cart-item" data-id="<%= cart._id%>" data-product="<%= cart.product._id%>" data-price="<%= cart.product.price%>">
+          <input type="checkbox" class="item-checkbox" <% if (cart.product.amount==0){%> disabled<%}%>>
+          <img src="<%= cart.product.preview%>" alt="Điện thoại Samsung Galaxy S23" class="item-image">
+          <div class="item-details">
+            <h3 class="item-name"><%= cart.product.name%></h3>
+            <div class="item-price"><%= formatVND(cart.product.price)%></div>
+            <div class="item-actions">
+              <% if (cart.product.amount>0){%>
+              <div class="quantity-control" data-amount="<%= cart.product.amount%>">
+                <button class="quantity-btn decrease-btn">-</button>
+                <input type="text" class="quantity-input" value="1" readonly>
+                <button class="quantity-btn increase-btn">+</button>
+              </div>
+
+              <%}else{%> Hết hàng <%}%>
+              
+              <button class="remove-btn">Xóa</button>
+            </div>
+          </div>
+          <div class="item-subtotal">18.990.000₫</div>
+        </div>
+        <%})%>
+            </div>
+            <div class="cart-summary">
+              <h2 class="summary-title">Tổng giỏ hàng</h2>
+              <div class="summary-row">
+                <span class="summary-label">Tạm tính</span>
+                <span class="summary-value" id="subtotal">0₫</span>
+              </div>
+              <div class="summary-row">
+                <span class="summary-label">Phí vận chuyển</span>
+                <span class="summary-value">Miễn phí</span>
+              </div>
+              <div class="total-row">
+                <span>Tổng cộng</span>
+                <span id="total">0₫</span>
+              </div>
+              <button class="checkout-btn" id="continue-btn">Tiếp tục</button>
+              <a href="/" class="continue-shopping">Tiếp tục mua sắm</a>
+            </div>
+          </div>
+
+          <!-- Phần thông tin giao hàng -->
+          <div class="shipping-container" id="shipping-section">
+            <div class="shipping-form">
+              <h2 class="form-title">Thông tin giao hàng</h2>
+
+              <div class="form-group">
+                <label for="fullname" class="form-label">Họ và tên <span style="color: #dc3545">*</span></label>
+                <input type="text" id="fullname" class="form-input" placeholder="Nhập họ và tên người nhận" required>
+                <div class="error-message" id="fullname-error">Vui lòng nhập họ và tên</div>
+              </div>
+
+              <div class="form-group">
+                <label for="phone" class="form-label">Số điện thoại <span style="color: #dc3545">*</span></label>
+                <input type="tel" id="phone" class="form-input" placeholder="Nhập số điện thoại liên hệ" required>
+                <div class="error-message" id="phone-error">Vui lòng nhập số điện thoại hợp lệ</div>
+              </div>
+
+              <div class="form-group">
+                <label for="address" class="form-label">Địa chỉ cụ thể <span style="color: #dc3545">*</span></label>
+                <input type="text" id="address" class="form-input" placeholder="Số nhà, tên đường, phường/xã..." required>
+                <div class="error-message" id="address-error">Vui lòng nhập địa chỉ giao hàng</div>
+              </div>
+
+              <div class="form-group">
+                <label for="notes" class="form-label">Ghi chú</label>
+                <textarea id="notes" class="form-input" rows="3" placeholder="Ghi chú về đơn hàng, ví dụ: thời gian hay chỉ dẫn địa điểm giao hàng chi tiết hơn."></textarea>
+              </div>
+
+              <!-- Phương thức thanh toán -->
+              <div class="payment-methods">
+                <h3 class="payment-methods-title">Phương thức thanh toán <span style="color: #dc3545">*</span></h3>
+
+                <div class="payment-method" id="cod-method">
+                  <input type="radio" name="payment-method" id="cod" class="payment-method-radio" value="cod">
+                  <div class="payment-method-icon">💵</div>
+                  <div class="payment-method-details">
+                    <div class="payment-method-name">Thanh toán khi nhận hàng (COD)</div>
+                    <div class="payment-method-description">Bạn sẽ thanh toán bằng tiền mặt khi nhận hàng</div>
+                  </div>
+                </div>
+
+                <div class="payment-method" id="bank-method">
+                  <input type="radio" name="payment-method" id="bank" class="payment-method-radio" value="bank">
+                  <div class="payment-method-icon">🏦</div>
+                  <div class="payment-method-details">
+                    <div class="payment-method-name">Chuyển khoản ngân hàng</div>
+                    <div class="payment-method-description">Chuyển khoản qua ngân hàng trước khi giao hàng</div>
+                  </div>
+                </div>
+
+                <div class="bank-details" id="bank-details">
+                  <div class="bank-info">
+                    <span class="bank-info-label">Ngân hàng:</span>
+                    <span class="bank-info-value">Vietcombank</span>
+                  </div>
+                  <div class="bank-info">
+                    <span class="bank-info-label">Số tài khoản:</span>
+                    <span class="bank-info-value">1234567890</span>
+                  </div>
+                  <div class="bank-info">
+                    <span class="bank-info-label">Chủ tài khoản:</span>
+                    <span class="bank-info-value">CÔNG TY TNHH ABC</span>
+                  </div>
+                  <div class="bank-info">
+                    <span class="bank-info-label">Nội dung chuyển khoản:</span>
+                    <span class="bank-info-value">Thanh toán đơn hàng #<span id="order-id">12345</span></span>
+                  </div>
+                </div>
+
+                <div class="error-message" id="payment-method-error">Vui lòng chọn phương thức thanh toán</div>
+              </div>
+
+              <div class="order-summary">
+                <h3 class="order-summary-title">Thông tin đơn hàng</h3>
+                <div class="summary-row">
+                  <span class="summary-label">Số lượng sản phẩm</span>
+                  <span class="summary-value" id="order-item-count">0</span>
+                </div>
+                <div class="summary-row">
+                  <span class="summary-label">Tạm tính</span>
+                  <span class="summary-value" id="order-subtotal">0₫</span>
+                </div>
+                <div class="summary-row">
+                  <span class="summary-label">Phí vận chuyển</span>
+                  <span class="summary-value">Miễn phí</span>
+                </div>
+                <div class="total-row">
+                  <span>Tổng cộng</span>
+                  <span id="order-total">0₫</span>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button class="back-btn" id="back-to-cart-btn">Quay lại giỏ hàng</button>
+                <button class="payment-btn" id="payment-btn">Thanh toán</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Phần giỏ hàng trống -->
+          <div class="empty-cart" id="empty-cart">
+            <div class="empty-cart-icon">🛒</div>
+            <h2 class="empty-cart-text">Giỏ hàng của bạn đang trống</h2>
+            <a href="/" class="shop-now-btn">Mua sắm ngay</a>
+          </div>
+  </main>
+  <form style="display: none;" action="/cart/:id/delete" method="post" id="delete-form"></form>
+  <form style="display: none;" action="/cart/buy" method="post" id="checkout-form">
+    <input type="hidden" name="items" id="checkout-items">
+    <input type="hidden" name="name" id="checkout-fullname">
+    <input type="hidden" name="phone" id="checkout-phone">
+    <input type="hidden" name="address" id="checkout-address">
+    <input type="hidden" name="notes" id="checkout-notes">
+    <input type="hidden" name="paymentMethod" id="checkout-payment-method">
+    <input type="hidden" name="price" id="checkout-total">
+  </form>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Lấy các phần tử DOM
+      const selectAllCheckbox = document.getElementById('select-all-checkbox');
+      const itemCheckboxes = document.querySelectorAll('.item-checkbox');
+      const cartItems = document.querySelectorAll('.cart-item');
+      const cartItemsContainer = document.querySelector('.cart-items');
+      const emptyCart = document.getElementById('empty-cart');
+      const cartContainer = document.querySelector('.cart-container');
+      const subtotalElement = document.getElementById('subtotal');
+      const totalElement = document.getElementById('total');
+      const continueBtn = document.getElementById('continue-btn');
+
+      // Phần tử trang thông tin giao hàng
+      const cartSection = document.getElementById('cart-section');
+      const shippingSection = document.getElementById('shipping-section');
+      const backToCartBtn = document.getElementById('back-to-cart-btn');
+      const orderItemCount = document.getElementById('order-item-count');
+      const orderSubtotal = document.getElementById('order-subtotal');
+      const orderTotal = document.getElementById('order-total');
+
+      // Form elements
+      const fullnameInput = document.getElementById('fullname');
+      const phoneInput = document.getElementById('phone');
+      const addressInput = document.getElementById('address');
+      const notesInput = document.getElementById('notes');
+      const paymentMethodRadios = document.querySelectorAll('input[name="payment-method"]');
+      const paymentBtn = document.getElementById('payment-btn');
+      const checkoutForm = document.getElementById('checkout-form');
+
+      // Payment method elements
+      const codMethod = document.getElementById('cod-method');
+      const bankMethod = document.getElementById('bank-method');
+      const bankDetails = document.getElementById('bank-details');
+
+      // Error messages
+      const fullnameError = document.getElementById('fullname-error');
+      const phoneError = document.getElementById('phone-error');
+      const addressError = document.getElementById('address-error');
+      const paymentMethodError = document.getElementById('payment-method-error');
+
+      // Định dạng tiền tệ
+      // function formatCurrency(amount) {
+      //   return amount.toLocaleString('vi-VN') + '₫';
+      // }
+      function formatCurrency(amount) {
+        return amount.toLocaleString('vi-VN', {
+          style: 'currency',
+          currency: 'VND',
+        });
+      }
+
+      // Tính toán tổng tiền của các sản phẩm đã chọn
+      function calculateTotal() {
+        let subtotal = 0;
+        let selectedCount = 0;
+
+        cartItems.forEach(item => {
+          const checkbox = item.querySelector('.item-checkbox');
+          if (checkbox.checked) {
+            const price = parseInt(item.getAttribute('data-price'));
+            const quantity = parseInt(item.querySelector('.quantity-input').value);
+            subtotal += price * quantity;
+            selectedCount += quantity;
+          }
+        });
+
+        subtotalElement.textContent = formatCurrency(subtotal);
+        totalElement.textContent = formatCurrency(subtotal);
+
+        // Cập nhật thông tin đơn hàng ở trang giao hàng
+        orderItemCount.textContent = selectedCount;
+        orderSubtotal.textContent = formatCurrency(subtotal);
+        orderTotal.textContent = formatCurrency(subtotal);
+
+        // Kiểm tra nếu không có sản phẩm nào được chọn
+        const hasSelectedItems = Array.from(itemCheckboxes).some(checkbox => checkbox.checked);
+        continueBtn.disabled = !hasSelectedItems;
+        continueBtn.style.opacity = hasSelectedItems ? '1' : '0.5';
+
+        return subtotal;
+      }
+
+      // Cập nhật tổng tiền của một sản phẩm
+      function updateItemSubtotal(item) {
+        const price = parseInt(item.getAttribute('data-price'));
+        const quantityElement = item.querySelector('.quantity-input')
+        let quantity = 1
+        if (quantityElement) {
+          quantity = parseInt(quantityElement.value);
+
+        }
+        const subtotal = price * quantity;
+        item.querySelector('.item-subtotal').textContent = formatCurrency(subtotal);
+      }
+
+      // Kiểm tra trạng thái "Chọn tất cả"
+      function checkSelectAllStatus() {
+        const allChecked = Array.from(itemCheckboxes).every(checkbox => checkbox.checked);
+        selectAllCheckbox.checked = allChecked && itemCheckboxes.length > 0;
+      }
+
+      // Kiểm tra nếu giỏ hàng trống
+      function checkEmptyCart() {
+        const hasItems = cartItems.length > 0;
+        cartContainer.style.display = hasItems ? 'flex' : 'none';
+        emptyCart.style.display = hasItems ? 'none' : 'block';
+      }
+
+      // Validate form
+      function validateForm() {
+        let isValid = true;
+
+        // Validate fullname
+        if (!fullnameInput.value.trim()) {
+          fullnameInput.classList.add('error');
+          fullnameError.style.display = 'block';
+          isValid = false;
+        } else {
+          fullnameInput.classList.remove('error');
+          fullnameError.style.display = 'none';
+        }
+
+        // Validate phone
+        const phoneRegex = /^(0|\+84)[3|5|7|8|9][0-9]{8}$/;
+        if (!phoneRegex.test(phoneInput.value.trim())) {
+          phoneInput.classList.add('error');
+          phoneError.style.display = 'block';
+          isValid = false;
+        } else {
+          phoneInput.classList.remove('error');
+          phoneError.style.display = 'none';
+        }
+
+        // Validate address
+        if (!addressInput.value.trim()) {
+          addressInput.classList.add('error');
+          addressError.style.display = 'block';
+          isValid = false;
+        } else {
+          addressInput.classList.remove('error');
+          addressError.style.display = 'none';
+        }
+
+        // Validate payment method
+        const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked');
+        if (!selectedPaymentMethod) {
+          paymentMethodError.style.display = 'block';
+          isValid = false;
+        } else {
+          paymentMethodError.style.display = 'none';
+        }
+
+        return isValid;
+      }
+
+      // Prepare checkout data
+      function prepareCheckoutData() {
+        const selectedItems = Array.from(cartItems)
+          .filter(item => item.querySelector('.item-checkbox').checked)
+          .map(item => {
+            const product = item.getAttribute('data-product');
+            const quantity = item.querySelector('.quantity-input').value;
+            return {
+              product,
+              quantity
+            };
+          });
+
+        const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+        const total = calculateTotal();
+
+        // Set form values
+        document.getElementById('checkout-items').value = JSON.stringify(selectedItems);
+        document.getElementById('checkout-fullname').value = fullnameInput.value;
+        document.getElementById('checkout-phone').value = phoneInput.value;
+        document.getElementById('checkout-address').value = addressInput.value;
+        document.getElementById('checkout-notes').value = notesInput.value;
+        document.getElementById('checkout-payment-method').value = selectedPaymentMethod;
+        document.getElementById('checkout-total').value = total;
+
+        return {
+          items: selectedItems,
+          fullname: fullnameInput.value,
+          phone: phoneInput.value,
+          address: addressInput.value,
+          notes: notesInput.value,
+          payment_method: selectedPaymentMethod,
+          total: total
+        };
+      }
+
+      // Xử lý sự kiện chọn tất cả
+      selectAllCheckbox.addEventListener('change', function() {
+        const isChecked = this.checked;
+
+        itemCheckboxes.forEach(checkbox => {
+          if (checkbox.disabled)
+            return
+
+          checkbox.checked = isChecked;
+          const cartItem = checkbox.closest('.cart-item');
+          if (isChecked) {
+            cartItem.classList.add('selected');
+          } else {
+            cartItem.classList.remove('selected');
+          }
+        });
+
+        calculateTotal();
+      });
+
+      // Xử lý sự kiện chọn từng sản phẩm
+      itemCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+          const cartItem = this.closest('.cart-item');
+
+          if (this.checked) {
+            cartItem.classList.add('selected');
+          } else {
+            cartItem.classList.remove('selected');
+          }
+
+          checkSelectAllStatus();
+          calculateTotal();
+        });
+      });
+
+      // Xử lý sự kiện tăng số lượng
+      document.querySelectorAll('.increase-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const maxAmount = this.parentElement.dataset.amount
+
+          const item = this.closest('.cart-item');
+          const quantityInput = item.querySelector('.quantity-input');
+          let quantity = parseInt(quantityInput.value);
+
+
+          if (quantityInput.value < parseInt(maxAmount)) {
+
+            quantityInput.value = ++quantity;
+
+          }
+          updateItemSubtotal(item);
+          calculateTotal();
+        });
+      });
+
+      // Xử lý sự kiện giảm số lượng
+      document.querySelectorAll('.decrease-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const item = this.closest('.cart-item');
+          const quantityInput = item.querySelector('.quantity-input');
+          let quantity = parseInt(quantityInput.value);
+
+          if (quantity > 1) {
+            quantityInput.value = --quantity;
+            updateItemSubtotal(item);
+            calculateTotal();
+          }
+        });
+      });
+
+      // Xử lý sự kiện xóa sản phẩm
+      const deleteForm = document.getElementById('delete-form');
+      document.querySelectorAll('.remove-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const cartItem = this.closest('.cart-item');
+          const cartID = cartItem.dataset.id;
+          deleteForm.action = `/cart/${cartID}/delete`;
+          deleteForm.submit();
+        });
+      });
+
+      // Xử lý sự kiện tiếp tục đến trang thông tin giao hàng
+      continueBtn.addEventListener('click', function() {
+        const selectedItems = Array.from(cartItems).filter(item =>
+          item.querySelector('.item-checkbox').checked
+        );
+
+        if (selectedItems.length > 0) {
+          // Chuyển đến trang thông tin giao hàng
+          cartSection.style.display = 'none';
+          shippingSection.style.display = 'block';
+
+          // Cuộn lên đầu trang
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+
+          // Cập nhật thông tin đơn hàng
+          calculateTotal();
+        } else {
+          alert('Vui lòng chọn ít nhất một sản phẩm để tiếp tục');
+        }
+      });
+
+      // Xử lý sự kiện quay lại giỏ hàng
+      backToCartBtn.addEventListener('click', function() {
+        shippingSection.style.display = 'none';
+        cartSection.style.display = 'flex';
+
+        // Cuộn lên đầu trang
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+
+      // Xử lý sự kiện chọn phương thức thanh toán
+      codMethod.addEventListener('click', function() {
+        document.getElementById('cod').checked = true;
+        codMethod.classList.add('selected');
+        bankMethod.classList.remove('selected');
+        bankDetails.classList.remove('active');
+        paymentMethodError.style.display = 'none';
+      });
+
+      bankMethod.addEventListener('click', function() {
+        document.getElementById('bank').checked = true;
+        bankMethod.classList.add('selected');
+        codMethod.classList.remove('selected');
+        bankDetails.classList.add('active');
+        paymentMethodError.style.display = 'none';
+      });
+
+      // Xử lý sự kiện input để validate realtime
+      fullnameInput.addEventListener('input', function() {
+        if (this.value.trim()) {
+          this.classList.remove('error');
+          fullnameError.style.display = 'none';
+        }
+      });
+
+      phoneInput.addEventListener('input', function() {
+        const phoneRegex = /^(0|\+84)[3|5|7|8|9][0-9]{8}$/;
+        if (phoneRegex.test(this.value.trim())) {
+          this.classList.remove('error');
+          phoneError.style.display = 'none';
+        }
+      });
+
+      addressInput.addEventListener('input', function() {
+        if (this.value.trim()) {
+          this.classList.remove('error');
+          addressError.style.display = 'none';
+        }
+      });
+
+      // Xử lý sự kiện thanh toán
+      paymentBtn.addEventListener('click', function() {
+        if (validateForm()) {
+          const checkoutData = prepareCheckoutData();
+          console.log('Checkout data:', checkoutData);
+
+          // Submit form
+          checkoutForm.submit();
+        } else {
+          // Cuộn đến lỗi đầu tiên
+          const firstError = document.querySelector('.form-input.error');
+          if (firstError) {
+            firstError.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center'
+            });
+          }
+        }
+      });
+
+      // Khởi tạo
+      cartItems.forEach(updateItemSubtotal);
+      checkEmptyCart();
+      calculateTotal();
+    });
+  </script>
+</body>

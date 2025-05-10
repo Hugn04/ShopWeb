@@ -4,7 +4,7 @@
     <!-- MAIN CONTAINER -->
     <div id="container">
       <!-- SHOP NAME -->
-      <div id="shopName"><a href="/"> <b>HUGN</b> </a></div>
+      <div id="shopName"><a href="/"> <b>PHUC</b> </a></div>
       <!-- COLLCETIONS ON WEBSITE -->
       <div id="collection">
         <div id="clothing"><a href="/products">Sản phẩm</a></div>
@@ -20,8 +20,10 @@
       <!-- USER SECTION (CART AND USER ICON) -->
       <div id="user">
         <a id="card" href="/cart">
-          <div class="cart__icon"><i class="fas fa-shopping-cart addedToCart"></i></div>
-          <div id="badge"> 0 </div>
+          <div class="cart__icon">
+            <i class="fas fa-shopping-cart addedToCart"></i>
+            <div id="badge"> <%= cartCount%> </div></div>
+          
         </a>
         <div class="user__info">
           <% if(user) {%>
@@ -30,6 +32,7 @@
         <div class="menu">
           <div>
             <div class="item"><a href="#">Thông tin tài khoản</a></div>
+            <div class="item"><a href="#">Thông tin đơn hàng</a></div>
             <div class="item"><a href="/logout">Đăng xuất</a></div>
           </div>
         </div>
