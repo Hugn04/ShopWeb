@@ -4,13 +4,18 @@ const Product = require('../Model/Product');
 class SiteController {
     async index(req, res) {
         try {
-            const accessory = await Product.find({ isAccessory: true });
-            const notAccessory = await Product.find({ isAccessory: false }).populate('category', 'name');
-            
-            
+            const hotProducts = await Product.find({ isAccessory: true })
+                .sort({ sold: -1 }) // Sắp xếp theo số lượng bán giảm dần
+                .limit(5)
+                .populate('category', 'name');
+            const newProducts = await Product.find({ isAccessory: false })
+                .sort({ createdAt: -1 }) // Sắp xếp theo ngày tạo giảm dần (mới nhất trước)
+                .limit(5)
+                .populate('category', 'name');
+
             res.render('pages/content', {
-                accessory,
-                notAccessory,
+                hotProducts,
+                newProducts,
                 formatVND,
                 error: req.flash('error'),
                 success: req.flash('success'),

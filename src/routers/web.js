@@ -1,4 +1,4 @@
-const { Router, json } = require('express');
+const { Router } = require('express');
 const siteController = require('../app/Controllers/SiteController');
 const productController = require('../app/Controllers/ProductController');
 const userController = require('../app/Controllers/UserController');
@@ -6,7 +6,6 @@ const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
 const adminController = require('../app/Controllers/AdminController');
 const { addProductService } = require('../services/ProductService');
-const Product = require('../app/Model/Product');
 const initData = require('../fakedata.js');
 const webRouter = Router();
 webRouter.use('*', auth);
@@ -40,11 +39,9 @@ webRouter.post('/cart/:id/delete', productController.removeCart);
 webRouter.post('/product/add-to-cart/:id', productController.addToCart);
 
 
-
-
-webRouter.post('/:slug/buy', productController.buy);
-webRouter.get('/:slug/product', productController.index);
 webRouter.get('/products', productController.index);
+
+
 webRouter.get('/product/:id', productController.productDetail);
 
 webRouter.get('/', siteController.index);
@@ -56,8 +53,8 @@ webRouter.get('/data', async function (req, res) {
     });
     return res.json(initData);
 });
-// webRouter.use((req, res, next) => {
-//     res.render('404Page', { layout: false });
-// });
+webRouter.use((req, res, next) => {
+    res.render('pages/404page', { layout: false });
+});
 
 module.exports = webRouter;

@@ -3,7 +3,7 @@
 <div id="mainContainer">
   <h1> Sản phẩm bán chạy </h1>
   <div class="containerProductGrid">
-    <% notAccessory.forEach((item)=>{%>
+    <% hotProducts.forEach((item)=>{%>
     <div id="box">
       <a href="/product/<%= item._id%>"><img src=<%=item.preview%>>
         <div id="details">
@@ -11,7 +11,7 @@
             <%= item.name%>
           </h3>
           <h4 class="category">
-            <%= item.category.name%>
+            Đã bán ( <%= item.sold%> )    Còn lại ( <%= item.amount%> )
           </h4>
           <h2 class="price">
             <%= formatVND(item.price)%>
@@ -24,7 +24,7 @@
   <hr>
   <h1> Sản phẩm mới</h1>
   <div class="containerProductGrid">
-    <% accessory.forEach((item)=>{%>
+    <% newProducts.forEach((item)=>{%>
     <div id="box">
       <a href="/product/<%= item._id%>"><img src=<%=item.preview%>>
         <div id="details">
@@ -32,7 +32,7 @@
             <%= item.name%>
           </h3>
           <h4 class="category">
-            <%= item.brand%>
+            <%= item.category.name%>
           </h4>
           <h2 class="price">
             <%= formatVND(item.price)%>

@@ -6,10 +6,14 @@ const Schema = mongoose.Schema;
 
 const OrdersModel = new Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
-    product: { type: mongoose.Schema.Types.ObjectId, ref: 'products' },
+    products: [
+        {
+            product: { type: mongoose.Schema.Types.ObjectId, ref: 'products' },
+            quantity: Number,
+        },
+    ],
     createdAt: { type: Date, default: Date.now },
-    name:String,
-    quantity:Number,
+    name: String,
     price: Number,
     phone: { type: String, require },
     address: { type: String, require },

@@ -13,6 +13,7 @@ const ProductModel = new Schema({
     amount: { type: Number, default: 0 },
     price: { type: Number, required: true },
     sold: { type: Number, default: 0 },
+    createdAt: { type: Date, default: Date.now },
 });
 // Tạo model và export
 const Product = mongoose.model('products', ProductModel);

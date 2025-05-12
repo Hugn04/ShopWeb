@@ -1,0 +1,166 @@
+<link rel="stylesheet" href="/css/products.css">
+<!-- Nội dung chính -->
+<div class="container">
+  <h1 class="page-title">Tất cả sản phẩm</h1>
+
+  <!-- Nút hiển thị/ẩn bộ lọc trên mobile -->
+  <button class="filter-toggle" id="filterToggle">
+    <i class="fas fa-filter"></i> Hiển thị bộ lọc
+  </button>
+
+  <div class="products-layout">
+    <!-- Sidebar lọc -->
+    <aside class="filters-sidebar" id="filtersSidebar">
+      <!-- Lọc theo danh mục -->
+      <div class="filter-card">
+        <h3 class="filter-title">Danh mục sản phẩm</h3>
+        <ul class="category-list">
+          <li class="category-item">
+            <a href="/products?category=" class="category-link">
+              Tất cả sản phẩm
+              <span class="category-count"><%= countProduct%></span>
+            </a>
+          </li>
+          <% categorys.forEach((category)=>{%>
+          <li class="category-item">
+            <a href="/products?category=<%= category._id%>" class="category-link">
+              <%= category.name%>
+              <span class="category-count"><%= category.count%></span>
+            </a>
+          </li>
+          <%})%>
+        </ul>
+      </div>
+
+
+    </aside>
+    <!-- Nội dung sản phẩm -->
+    <div class="products-content">
+      <!-- Thanh công cụ -->
+      <div class="products-toolbar">
+        <div class="products-count">
+          Hiển thị <%= skip + 1%>-<%= skip + products.length%> của <%= totalProducts%> sản phẩm
+        </div>
+        <div class="products-sorting">
+          <span class="sort-label">Sắp xếp theo:</span>
+          <select class="sort-select">
+            <option value="default">Mặc định</option>
+            <option value="price-asc">Giá: Thấp đến cao</option>
+            <option value="price-desc">Giá: Cao đến thấp</option>
+            <option value="name-asc">Tên: A-Z</option>
+            <option value="name-desc">Tên: Z-A</option>
+            <option value="newest">Mới nhất</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Lưới sản phẩm -->
+      <div class="containerProductGrid">
+        <% products.forEach((product)=>{%>
+        <div id="box">
+          <a href="/product/<%= product._id%>"><img src="<%= product.preview%>">
+            <div id="details">
+              <h3 class="name"><%= product.name%></h3>
+              <h4 class="category"><%= product.category.name%></h4>
+              <h2 class="price"><%= formatVND(product.price)%></h2>
+            </div>
+          </a>
+        </div>
+        <%})%>
+      </div>
+
+      <!-- Phân trang -->
+      <ul class="pagination">
+        <li class="pagination-item">
+          <a href="#" data-page="1" class="pagination-link">«</a>
+        </li>
+        <% for(index=1; index <= totalPages; index++ ){%>
+        <li class="pagination-item">
+          <a href="#" data-page="<%= index%>" class="pagination-link <% if(page===index){%>
+            active
+          <%}%>"><%= index%></a>
+        </li>
+        <%}%>
+        <li class="pagination-item">
+          <a href="#" data-page="<%= totalPages%>" class="pagination-link">»</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  // JavaScript để hiển thị/ẩn bộ lọc trên mobile
+  document.getElementById('filterToggle').addEventListener('click', function() {
+    const filtersSidebar = document.getElementById('filtersSidebar');
+    filtersSidebar.classList.toggle('show');
+
+    if (filtersSidebar.classList.contains('show')) {
+      this.textContent = 'Ẩn bộ lọc';
+    } else {
+      this.textContent = 'Hiển thị bộ lọc';
+    }
+  });
+
+  (function handleActiveCategory() {
+    const params = new URLSearchParams(window.location.search);
+
+
+    const href = `${window.location.pathname}?category=${params.get('category')}`;
+
+
+    document.querySelector(`.category-item [href="${href}"]`).classList.add('active')
+  })();
+  const urlParams = new URLSearchParams(window.location.search);
+  const currentCategory = urlParams.get('sort');
+
+  const selectEl = document.querySelector(".sort-select")
+  if (currentCategory) {
+    selectEl.value = currentCategory;
+  }
+  selectEl.addEventListener('change', function() {
+    const categoryId = this.value;
+    const url = new URL(window.location.href);
+
+    if (categoryId) {
+      url.searchParams.set('sort', categoryId);
+    } else {
+      url.searchParams.delete('sort');
+    }
+
+    window.location.href = url.toString();
+  });
+
+
+  // JavaScript để xử lý sự kiện click vào nút phân trang
+  document.querySelectorAll('.pagination-link').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      if (!this.classList.contains('disabled')) {
+        e.preventDefault();
+
+        // Xóa class active từ tất cả các liên kết phân trang
+        document.querySelectorAll('.pagination-link').forEach(function(l) {
+          l.classList.remove('active');
+        });
+
+        // Thêm class active cho liên kết được click
+        this.classList.add('active');
+        console.log(this);
+
+        const categoryId = this.dataset.page;
+        const url = new URL(window.location.href);
+
+        if (categoryId) {
+          url.searchParams.set('page', categoryId);
+        } else {
+          url.searchParams.delete('page');
+        }
+
+        window.location.href = url.toString();
+        // Ở đây bạn có thể thêm code để chuyển trang
+        console.log('Đã chuyển đến trang:', this.textContent);
+      }
+    });
+  });
+</script>

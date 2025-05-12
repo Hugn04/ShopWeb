@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Không tìm thấy trang</title>
+    <style>
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+            line-height: 1.6;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .error-code {
+            font-size: 150px;
+            font-weight: 900;
+            color: #4361ee;
+            line-height: 1;
+            margin-bottom: 20px;
+            position: relative;
+            text-shadow: 2px 2px 0px rgba(67, 97, 238, 0.2);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .error-code::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 20px;
+            background: radial-gradient(ellipse at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 70%);
+            bottom: -30px;
+            left: 0;
+            border-radius: 50%;
+            animation: shadow 6s ease-in-out infinite;
+        }
+
+        @keyframes shadow {
+            0% {
+                transform: scale(1);
+                opacity: 0.4;
+            }
+            50% {
+                transform: scale(0.8);
+                opacity: 0.2;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0.4;
+            }
+        }
+
+        .error-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #343a40;
+        }
+
+        .error-message {
+            font-size: 18px;
+            color: #6c757d;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .home-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #4361ee;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .home-button:hover {
+            background-color: #3a56d4;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        .home-button:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .search-form {
+            max-width: 400px;
+            margin: 30px auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 50px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #4361ee;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .search-button {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            background-color: #4361ee;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-button:hover {
+            background-color: #3a56d4;
+        }
+
+        /* Astronaut Animation */
+        .astronaut {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            margin: 0 auto 40px;
+        }
+
+        .astronaut-body {
+            width: 100px;
+            height: 150px;
+            background-color: #f8f9fa;
+            border: 5px solid #4361ee;
+            border-radius: 50px;
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            overflow: hidden;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .astronaut-head {
+            width: 80px;
+            height: 80px;
+            background-color: #f8f9fa;
+            border: 5px solid #4361ee;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 60px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .astronaut-visor {
+            width: 60px;
+            height: 30px;
+            background-color: #343a40;
+            border-radius: 10px;
+            position: absolute;
+            top: 25px;
+            left: 10px;
+        }
+
+        .astronaut-arm-left {
+            width: 20px;
+            height: 70px;
+            background-color: #4361ee;
+            border-radius: 10px;
+            position: absolute;
+            top: 70px;
+            left: 30px;
+            transform: rotate(20deg);
+            transform-origin: top center;
+            animation: wave 3s ease-in-out infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% {
+                transform: rotate(20deg);
+            }
+            50% {
+                transform: rotate(40deg);
+            }
+        }
+
+        .astronaut-arm-right {
+            width: 20px;
+            height: 70px;
+            background-color: #4361ee;
+            border-radius: 10px;
+            position: absolute;
+            top: 70px;
+            right: 30px;
+            transform: rotate(-20deg);
+        }
+
+        .astronaut-leg-left {
+            width: 25px;
+            height: 80px;
+            background-color: #4361ee;
+            border-radius: 10px;
+            position: absolute;
+            bottom: 0;
+            left: 70px;
+        }
+
+        .astronaut-leg-right {
+            width: 25px;
+            height: 80px;
+            background-color: #4361ee;
+            border-radius: 10px;
+            position: absolute;
+            bottom: 0;
+            right: 70px;
+        }
+
+        /* Stars Background */
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 5s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 0.2;
+            }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 120px;
+            }
+
+            .error-title {
+                font-size: 28px;
+            }
+
+            .error-message {
+                font-size: 16px;
+                padding: 0 20px;
+            }
+
+            .astronaut {
+                transform: scale(0.8);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .error-code {
+                font-size: 100px;
+            }
+
+            .error-title {
+                font-size: 24px;
+            }
+
+            .astronaut {
+                transform: scale(0.7);
+            }
+
+            .search-form {
+                padding: 0 20px;
+            }
+
+            .search-button {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Stars Background -->
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <!-- Astronaut Animation -->
+        <div class="astronaut">
+            <div class="astronaut-head">
+                <div class="astronaut-visor"></div>
+            </div>
+            <div class="astronaut-body"></div>
+            <div class="astronaut-arm-left"></div>
+            <div class="astronaut-arm-right"></div>
+            <div class="astronaut-leg-left"></div>
+            <div class="astronaut-leg-right"></div>
+        </div>
+
+        <!-- Error Content -->
+        <h1 class="error-code">404</h1>
+        <h2 class="error-title">Trang không tìm thấy</h2>
+        <p class="error-message">Xin lỗi, trang bạn đang tìm kiếm không tồn tại hoặc đã bị di chuyển. Vui lòng kiểm tra lại URL hoặc quay lại trang chủ.</p>
+            
+        
+        <!-- Home Button -->
+        <a href="/" class="home-button">Quay lại trang chủ</a>
+    </div>
+
+    <script>
+        // Tạo hiệu ứng sao lấp lánh
+        function createStars() {
+            const stars = document.getElementById('stars');
+            const count = 100;
+            
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Kích thước ngẫu nhiên
+                const size = Math.random() * 3;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                
+                // Vị trí ngẫu nhiên
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                
+                // Độ trễ ngẫu nhiên cho hiệu ứng nhấp nháy
+                star.style.animationDelay = Math.random() * 5 + 's';
+                
+                stars.appendChild(star);
+            }
+        }
+        
+        // Gọi hàm tạo sao khi trang tải xong
+        window.onload = createStars;
+    </script>
+</body>
+</html>

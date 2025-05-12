@@ -7,7 +7,7 @@
       <div id="shopName"><a href="/"> <b>PHUC</b> </a></div>
       <!-- COLLCETIONS ON WEBSITE -->
       <div id="collection">
-        <div id="clothing"><a href="/products">Sản phẩm</a></div>
+        <div id="clothing"><a href="/products?category=">Sản phẩm</a></div>
         <% if(user && user.role === "admin") {%>
         <div><a href="/admin">Trang quản trị</a></div>
         <%}%>
@@ -22,24 +22,26 @@
         <a id="card" href="/cart">
           <div class="cart__icon">
             <i class="fas fa-shopping-cart addedToCart"></i>
-            <div id="badge"> <%= cartCount%> </div></div>
-          
-        </a>
-        <div class="user__info">
-          <% if(user) {%>
-        <span><%= user.name%></span>
-        <img src="<%= user.avatar%>" class="userIcon"></img>
-        <div class="menu">
-          <div>
-            <div class="item"><a href="#">Thông tin tài khoản</a></div>
-            <div class="item"><a href="#">Thông tin đơn hàng</a></div>
-            <div class="item"><a href="/logout">Đăng xuất</a></div>
-          </div>
+            <div id="badge"> <%= cartCount%>
+      </div>
+    </div>
+
+    </a>
+    <div class="user__info">
+      <% if(user) {%>
+      <span><%= user.name%></span>
+      <img src="<%= user.avatar%>" class="userIcon"></img>
+      <div class="menu">
+        <div>
+          <div class="item"><a href="#">Thông tin tài khoản</a></div>
+          <div class="item"><a href="#">Thông tin đơn hàng</a></div>
+          <div class="item"><a href="/logout">Đăng xuất</a></div>
         </div>
-        <%}else{%>
-        <button><a href="/account">Đăng ký</a></button>
-        <button><a href="/account">Đăng nhập</a></button>
-        <%}%>
+      </div>
+      <%}else{%>
+      <button><a href="/account">Đăng ký</a></button>
+      <button><a href="/account">Đăng nhập</a></button>
+      <%}%>
                     
                     
                 </div>
@@ -48,3 +50,40 @@
 
     </section>
 </header>
+<script>
+
+  const input = document.querySelector('#search #input')
+  const url = new URL(window.location.href)
+  if(url.searchParams.get('search')){
+    input.value = url.searchParams.get('search')
+  }
+
+  input.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+      const value = this.value;
+      const url = new URL(window.location.origin + '/products?category=');      
+      if (value) {
+        url.searchParams.set('search', value);
+      } else {
+        url.searchParams.delete('search');
+      }
+      window.location.href = url.toString();
+    }
+  });
+  // input.addEventListener('change', function() {
+  //     const categoryId = this.value;
+  //     const url = new URL(window.location.href);
+
+  //     if (categoryId) {
+  //       url.searchParams.set('sort', categoryId);
+  //     } else {
+  //       url.searchParams.delete('sort');
+  //     }
+
+  //     window.location.href = url.toString();
+  //   });
+  
+</script>
+
+
+<script src="/js/header.js"></script>

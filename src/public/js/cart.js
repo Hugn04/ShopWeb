@@ -107,8 +107,6 @@ httpRequest.onreadystatechange = function()
             document.getElementById("totalItem").innerHTML = ('Tổng số sản phẩm: ' + counter)
 
             let item = document.cookie.split(',')[0].split('=')[1].split(" ")
-            console.log(counter)
-            console.log(item)
 
             let i;
             let totalAmount = 0

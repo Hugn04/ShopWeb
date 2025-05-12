@@ -1,7 +1,6 @@
-const { addProductService, deleteProductService, updateProductService } = require('../../services/ProductService');
+const { deleteProductService, deleteCategoryService } = require('../../services/ProductService');
 const formatDate = require('../../util/formatDate');
 const formatVND = require('../../util/formatVND');
-const { multipleMongooseToObject, mongooseToObject } = require('../../util/mongoose');
 const Category = require('../Model/Category');
 const Orders = require('../Model/Orders');
 
@@ -14,6 +13,16 @@ class AdminController {
             const customerCount = await User.countDocuments({ role: 'user' });
             const productCount = await Product.countDocuments();
             const orderCount = await Orders.countDocuments();
+            const temp = await Orders.aggregate([
+                {
+                    $group: {
+                        _id: null,
+                        totalRevenue: { $sum: '$price' },
+                    },
+                },
+            ]);
+            const orders = await Orders.find().limit(5);
+            const revenue = temp[0]?.totalRevenue || 0;
             const result = await Product.aggregate([
                 {
                     $lookup: {
@@ -41,6 +50,10 @@ class AdminController {
                 customerCount,
                 orderCount,
                 chart,
+                orders,
+                formatDate,
+                revenue,
+                formatVND,
                 error: req.flash('error'),
                 success: req.flash('success'),
             });
@@ -139,7 +152,6 @@ class AdminController {
     async customer(req, res) {
         try {
             const customers = await User.find({ role: 'user' });
-            console.log(customers);
 
             res.render('admin/customer', {
                 layout: 'layouts/admin',
@@ -172,7 +184,7 @@ class AdminController {
             );
             res.render('admin/category', {
                 layout: 'layouts/admin',
-                categorys:categoryWithCount,
+                categorys: categoryWithCount,
                 title: 'Admin Category',
                 error: req.flash('error'),
                 success: req.flash('success'),
@@ -194,7 +206,7 @@ class AdminController {
                 await Category.create({ name, description });
                 req.flash('success', 'Thêm danh mục thành công !');
             } else {
-                const result = await Category.findOneAndUpdate(
+                await Category.findOneAndUpdate(
                     { _id: req.params.id },
                     { name, description }, // dữ liệu cập nhật
                     { upsert: true, new: true }, // nếu không có thì tạo, trả về bản ghi mới
@@ -213,7 +225,7 @@ class AdminController {
     async deleteCategory(req, res) {
         const id = req.params.id;
         try {
-            await Category.deleteOne({ _id: id });
+            deleteCategoryService(id);
             req.flash('error', 'Xóa danh mục thành công !');
             res.redirect('/admin/category');
         } catch (error) {
